@@ -1,0 +1,15 @@
+{
+  "name": "sass-ast",
+  "version": "0.0.0",
+  "description": "Sass abstract syntax tree generator",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "file-importer": "0.0.1",
+    "gonzales-pe": "^3.0.0-29"
+  }
+}
