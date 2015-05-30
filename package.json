@@ -7,9 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
-    "file-importer": "0.0.1",
+    "file-importer": "^0.0.2",
     "gonzales-pe": "^3.0.0-29"
   }
 }
