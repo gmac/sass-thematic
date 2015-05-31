@@ -52,34 +52,34 @@ Resulting (abbreviated) [Gonzales](https://github.com/tonyganch/gonzales-pe) tre
         {
           "type": "ruleset",
           "content": [
-            ... ".sibling {}" ...
+            "... .sibling {} ..."
           ],
-          "start": { ... },
-          "end": { ... }
+          "start": { },
+          "end": { }
         }
       ],
-      "start": { ... },
-      "end": { ... },
+      "start": { },
+      "end": { },
       "import": "sibling",
       "file": "/path/to/test/sibling.scss"
     },
     {
       "type": "space",
       "content": "\n",
-      "start": { ... },
-      "end": { ... }
+      "start": { },
+      "end": { }
     },
     {
       "type": "ruleset",
       "content": [
-        ... ".index {}" ...
+        "... .index {} ..."
       ],
-      "start": { ... },
-      "end": { ... }
+      "start": { },
+      "end": { }
     }
   ],
-  "start": { ... },
-  "end": { ... },
+  "start": { },
+  "end": { },
   "import": "test/index",
   "file": "/path/to/test/index.scss"
 }
