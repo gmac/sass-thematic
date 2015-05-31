@@ -1,18 +1,16 @@
 # sass-ast
 
-[pre-release]
-
-Reconstitute an entire Sass filebase into an Abstract Syntax Tree (AST) of lexically-parsed grammar. This is useful for performing validations and/or extracting portions of your Sass styleset for specific purposes.
+Reconstitutes an entire Sass filebase into an Abstract Syntax Tree (AST) of lexically-parsed grammar. This is useful for performing validations and/or extracting portions of your Sass styleset for specific purposes.
 
 ## How it works
 
-This is an extremely lightweight library that combines [file-importer](https://github.com/gmac/file-importer) with the fabulous [gonzales-pe](https://github.com/tonyganch/gonzales-pe) CSS lexer:
+`sass-ast` is an extremely lightweight bridge combining [file-importer](https://github.com/gmac/file-importer) with the fabulous [gonzales-pe](https://github.com/tonyganch/gonzales-pe) CSS lexer:
 
  * `file-importer` is used to reconstitute the file tree of a Sass codebase, combining files referenced via `@import` statements.
 
- * As files are imported, each file is parsed into an AST by `gonzales`, and then merged into its parent AST in place of the original `@import` rule.
+ * As files are imported, each file is parsed into an AST by `gonzales`, and then merged into its parent AST in place of the original `@import` rule. Imported stylesheets are assigned `import` and `file` properties to annotate where the source was loaded from.
 
-The net result is a complete `gonzales` AST object, composed of deeply-nested source trees. Each imported stylesheet retains its own `stylesheet` node and line numbers. Also, `sass-ast` adds `import` and `file` properties to each `stylsheet` node in the tree, denoting where each stylesheet came from.
+The net result is a complete `gonzales` AST object, composed of deeply-nested source trees. Each imported stylesheet retains its own `stylesheet` node and line numbers.
 
 ### Example:
 
@@ -51,9 +49,7 @@ Resulting (abbreviated) [Gonzales](https://github.com/tonyganch/gonzales-pe) tre
       "content": [
         {
           "type": "ruleset",
-          "content": [
-            "... .sibling {} ..."
-          ],
+          "content": [ "tree for .sibling {}" ],
           "start": { },
           "end": { }
         }
@@ -71,9 +67,7 @@ Resulting (abbreviated) [Gonzales](https://github.com/tonyganch/gonzales-pe) tre
     },
     {
       "type": "ruleset",
-      "content": [
-        "... .index {} ..."
-      ],
+      "content": [ "tree for .index {}" ],
       "start": { },
       "end": { }
     }
@@ -85,7 +79,13 @@ Resulting (abbreviated) [Gonzales](https://github.com/tonyganch/gonzales-pe) tre
 }
 ```
 
+Calling the Gonzales `.toCSS('scss')` on this tree yields:
 
+```css
+.sibling {}
+
+.index {}
+```
 
 ## Install
 
