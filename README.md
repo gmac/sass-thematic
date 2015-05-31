@@ -14,22 +14,22 @@ The net result is a complete `gonzales` AST object, composed of deeply-nested so
 
 ### Example:
 
-In `index.scss`:
+**In `index.scss`:**
 
 ```
 @import 'sibling';
 .index {}
 ```
 
-In `sibling.scss`:
+**In `sibling.scss`:**
 
 ```
 .sibling {}
 ```
 
-Run parser:
+**Run `sassAST` parser:**
 
-```
+```javascript
 var sassAST = require('sass-ast');
 
 sassAST.parse({file: 'test/index'}, function(err, ast) {
@@ -38,7 +38,7 @@ sassAST.parse({file: 'test/index'}, function(err, ast) {
 });
 ```
 
-Resulting (abbreviated) [Gonzales](https://github.com/tonyganch/gonzales-pe) tree:
+**Resulting (abbreviated) [Gonzales](https://github.com/tonyganch/gonzales-pe) tree:**
 
 ```json
 {
@@ -49,7 +49,7 @@ Resulting (abbreviated) [Gonzales](https://github.com/tonyganch/gonzales-pe) tre
       "content": [
         {
           "type": "ruleset",
-          "content": [ "tree for .sibling {}" ],
+          "content": [ "~~ AST: .sibling {} ~~" ],
           "start": { },
           "end": { }
         }
@@ -67,7 +67,7 @@ Resulting (abbreviated) [Gonzales](https://github.com/tonyganch/gonzales-pe) tre
     },
     {
       "type": "ruleset",
-      "content": [ "tree for .index {}" ],
+      "content": [ "~~ AST: .index {} ~~" ],
       "start": { },
       "end": { }
     }
@@ -79,7 +79,7 @@ Resulting (abbreviated) [Gonzales](https://github.com/tonyganch/gonzales-pe) tre
 }
 ```
 
-Calling the Gonzales `.toCSS('scss')` on this tree yields:
+Calling the Gonzales `.toCSS('scss')` on this tree would yield:
 
 ```css
 .sibling {}
