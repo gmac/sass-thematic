@@ -1,11 +1,21 @@
 var gonzales = require('gonzales-pe');
 var File = require('file-importer');
 
+// Extend properties from `obj` onto `base`:
 function extend(base, obj) {
-  for (var i in obj) {
+  for (var i in obj)
     if (obj.hasOwnProperty(i)) base[i] = obj[i];
-  }
   return base;
+}
+
+// Creates an empty Gonzales stylesheet node:
+function emptyNode(opts) {
+  return extend(gonzales.createNode({
+    type: 'stylesheet',
+    content: [],
+    start: [0, 0],
+    end: [0, 0]
+  }), opts || {});
 }
 
 /**
@@ -23,15 +33,7 @@ File.prototype.compile = function(files) {
     // Compile aggregate data and AST wrapper.
     // This AST is a stylesheet with many nested stylesheets.
     this.data = '';
-    this.ast = gonzales.createNode({
-      type: 'stylesheet',
-      content: [],
-      start: [0, 0],
-      end: [0, 0]
-    });
-
-    // Use this after the next gonzales release:
-    //this.ast = gonzales.parse('', {syntax: 'scss'});
+    this.ast = emptyNode();
 
     for (var i = 0; i < files.length; i++) {
       this.data += files[i].data + '\n';
@@ -48,16 +50,14 @@ File.prototype.parse = function(done) {
   this.ast = this.ast || gonzales.parse(this.data, {syntax: 'scss'});
   this.ast.file = this.file;
 
-  console.log('parse:', this.file);
-
   var self = this;
   var ast = this.ast;
   var imports = {};
-  var nodes = {};
 
   // Loop through all root nodes in the stylesheet:
   for (var i=0; i < ast.content.length; i++) {
     var node = ast.content[i];
+    var nodeDelimiter = ast.content[i+1];
 
     // If a root node is an @rule
     if (node.is('atrules')) {
@@ -65,38 +65,47 @@ File.prototype.parse = function(done) {
       var match = node.toCSS('scss').match(/@import\s+['"]([^'"]+)['"]/);
 
       if (match) {
-        var file = match[1];
-        var nextNode = ast.content[i+1];
-
-        // Create a file for the import, if we need one:
-        if (!imports[file]) {
-          imports[file] = self.fork({file: file}).render(next);
-        }
-
-        // Assign a file reference for this node:
-        nodes[file] = nodes[file] || [];
-        nodes[file].push(node);
+        var proxyNode = emptyNode({
+          file: match[1],
+          importer: [node]
+        });
 
         // Remove any subsequent delimiter:
-        if (nextNode && nextNode.is('declarationDelimiter')) {
-          ast.content.splice(i+1, 1);
+        if (nodeDelimiter && nodeDelimiter.is('declarationDelimiter')) {
+          proxyNode.importer.push(nodeDelimiter);
         }
+
+        // Swap proxy node for previous import content:
+        ast.content.splice(i, proxyNode.importer.length, proxyNode);
+
+        // Create a file for the import, if we need one:
+        
+        if (!imports[proxyNode.file]) {
+          imports[proxyNode.file] = self.fork({file: proxyNode.file});
+          imports[proxyNode.file].proxyNodes = [];
+        }
+        
+        // Add into the new import's list of proxy instances:
+        imports[proxyNode.file].proxyNodes.push(proxyNode);
       }
     }
   }
+
+  // Tell all generated imports to render:
+  for (var i in imports) {
+    if (imports.hasOwnProperty(i)) imports[i].render(next);
+  }
+
+  // Call next in case we had no imports:
+  next();
 
   function next(err, file) {
     if (err) throw err;
 
     // Swap the new AST into place for the old @import rule:
-    if (file && nodes[file.file]) {
-      for (var i=0; i < nodes[file.file].length; i++) {
-        var node = nodes[file.file][i];
-
-        // Extend node with all properties of the imported AST:
-        for (var prop in file.ast) {
-          if (file.ast.hasOwnProperty(prop)) node[prop] = file.ast[prop];
-        }
+    if (file) {
+      for (var i=0; i < file.proxyNodes.length; i++) {
+        extend(file.proxyNodes[i], file.ast);
       }
     }
 
@@ -110,21 +119,11 @@ File.prototype.parse = function(done) {
     done(null, self);
   }
 
-  next();
   return this;
 };
-
 
 module.exports.parse = function(opts, done) {
   new File(opts).render(function(err, file) {
     done(err, file.ast);
   });
 };
-
-function doit(opts) {
-  new File(opts).render(function(err, file) {
-    console.log(JSON.stringify(file.ast, null, '  '));
-  });
-}
-
-doit({file: 'test/index'});
