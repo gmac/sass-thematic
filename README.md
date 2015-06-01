@@ -49,7 +49,7 @@ SassAST is a wrapper around [file-importer](https://github.com/gmac/file-importe
 
  * `file-importer` is used to reconstitute the file tree of a Sass codebase, combining files referenced via `@import` statements.
 
- * As files are imported, each file is parsed into an AST by `gonzales`, and then merged into its parent AST in place of the original `@import` rule. Imported stylesheets are assigned `import` and `file` properties to annotate where the source was loaded from.
+ * As files are imported, each file is parsed into an AST by `gonzales`, and then merged into its parent AST in place of the original `@import` rule. Imported stylesheets are assigned `importer` and `file` properties to annotate where and how the source was loaded.
 
 The net result is a complete `gonzales` AST object, composed of deeply-nested source trees. Each imported stylesheet retains its own `stylesheet` node and line numbers. To flatten a source tree and its line numbering, you may call `.toCSS('scss')` on the full tree, and then reparse it.
 
@@ -97,7 +97,7 @@ sassAST.parse({file: 'test/index'}, function(err, ast) {
       ],
       "start": { },
       "end": { },
-      "import": "sibling",
+      "importer": [ "~~ AST: @import 'sibling'; ~~" ],
       "file": "/path/to/test/sibling.scss"
     },
     {
@@ -115,7 +115,7 @@ sassAST.parse({file: 'test/index'}, function(err, ast) {
   ],
   "start": { },
   "end": { },
-  "import": "test/index",
+  "importer": [],
   "file": "/path/to/test/index.scss"
 }
 ```
