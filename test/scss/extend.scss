@@ -1,0 +1,34 @@
+@import 'junk';
+@import 'vars';
+
+.extend-junk {
+  color: $junk-color;
+  font-family: serif;
+}
+
+.extend-keep {
+  color: $keep-color;
+  font-family: serif;
+}
+
+.junk {
+  @extend .extend-junk;
+  color: $junk-color;
+}
+
+.keep {
+  @extend .extend-keep;
+  color: $junk-color;
+}
+
+.nested {
+  .junk {
+    @extend .extend-junk;
+    color: $junk-color;
+  }
+
+  .keep {
+    @extend .extend-keep;
+    color: $junk-color;
+  }
+}

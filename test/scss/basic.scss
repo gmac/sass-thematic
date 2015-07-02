@@ -1,0 +1,22 @@
+@import 'junk';
+@import 'vars';
+
+.remove {
+  color: $junk-color;
+  font-family: serif;
+}
+
+.keep {
+  color: $keep-color;
+  font-family: serif;
+}
+
+.nested {
+  color: $junk-color;
+  font-family: serif;
+
+  .keep {
+    color: $keep-color;
+    font-family: serif;
+  }
+}

@@ -1,0 +1,34 @@
+@import 'junk';
+@import 'vars';
+
+@mixin mixin-junk() {
+  color: $junk-color;
+  font-family: serif;
+}
+
+@mixin mixin-keep() {
+  color: $keep-color;
+  font-family: serif;
+}
+
+.junk {
+  @include mixin-junk;
+  color: $junk-color;
+}
+
+.keep {
+  @include mixin-keep;
+  color: $junk-color;
+}
+
+.nested {
+  .junk {
+    @include mixin-junk;
+    color: $junk-color;
+  }
+
+  .keep {
+    @include mixin-keep;
+    color: $junk-color;
+  }
+}
