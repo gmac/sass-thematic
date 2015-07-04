@@ -16,7 +16,8 @@ assert.doesNotContain = function(a, b) {
 };
 
 mocha.reporter('dot');
-mocha.addFile('test/basic');
+mocha.addFile('test/ast');
+//mocha.addFile('test/basic');
 
 mocha.run(function(failures) {
   process.on('exit', function() {

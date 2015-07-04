@@ -1,6 +1,10 @@
 var sassAST = require('./lib/ast');
 var reducer = require('./lib/reducer');
 
+module.exports.parseAST = function(opts, done) {
+  sassAST.parse(opts, done);
+};
+
 module.exports.parse = function(opts, done) {
   sassAST.parse(opts, function(err, ast) {
     ast = reducer.parse(ast, opts);
