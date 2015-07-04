@@ -1,0 +1,34 @@
+@import 'junk';
+@import 'vars';
+
+@for $i from 1 through 5 {
+  .remove-#{$i} {
+    color: $junk-color;
+  }
+}
+
+@for $i from 1 through 5 {
+  .keep-#{$i} {
+    color: $keep-color;
+  }
+}
+
+@each $c in $junk-color {
+  .remove {
+    color: $c;
+  }
+}
+
+@each $c in $keep-color {
+  .keep {
+    color: $c;
+  }
+}
+
+.remove {
+  color: #{$junk-color};
+}
+
+.keep {
+  color: #{$keep-color};
+}

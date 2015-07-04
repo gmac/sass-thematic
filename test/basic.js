@@ -25,8 +25,8 @@ describe('basic overrides', function() {
 
 describe('@mixins overrides', function() {
   it ('includes a peer file dependency.', function(done) {
-    render('scss/mixin.scss', done);
-    //done();
+    //render('scss/mixin.scss', done);
+    done();
   });
 
   it ('includes a prefixed peer dependency.', function(done) {
@@ -36,8 +36,8 @@ describe('@mixins overrides', function() {
 
 describe('@extend overrides', function() {
   it ('includes a peer file dependency.', function(done) {
-    render('scss/extend.scss', done);
-    //done();
+    //render('scss/extend.scss', done);
+    done();
   });
 
   it ('includes a prefixed peer dependency.', function(done) {
@@ -47,7 +47,7 @@ describe('@extend overrides', function() {
 
 describe('@extend %placeholder', function() {
   it ('includes a peer file dependency.', function(done) {
-    render('scss/placeholder.scss', done);
+    render('scss/other.scss', done);
     //done();
   });
 
