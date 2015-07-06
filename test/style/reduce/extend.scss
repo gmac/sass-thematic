@@ -17,8 +17,21 @@
 }
 
 .keep {
+  @extend .extend-junk;
+  color: $keep-color;
+}
+
+.keep {
   @extend .extend-keep;
   color: $junk-color;
+}
+
+.chain-junk {
+  @extend .junk;
+}
+
+.chain-keep {
+  @extend .keep;
 }
 
 .nested {
@@ -31,9 +44,4 @@
     @extend .extend-keep;
     color: $junk-color;
   }
-}
-
-.chain-keep {
-  @extend .keep;
-  color: $junk-color;
 }

@@ -25,10 +25,14 @@
   }
 }
 
-.remove {
-  color: #{$junk-color};
+@media (min-width: $junk-size) {
+  .remove {
+    color: $junk-size;
+  }
 }
 
-.keep {
-  color: #{$keep-color};
+@media (min-width: $keep-size) {
+  .keep {
+    color: $keep-color;
+  }
 }

@@ -1,5 +1,5 @@
 var sassAST = require('./lib/ast');
-var reducer = require('./lib/reducer');
+var reducer = require('./lib/reduce');
 
 module.exports.parseAST = function(opts, done) {
   sassAST.parse(opts, done);

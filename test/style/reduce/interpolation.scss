@@ -1,0 +1,10 @@
+@import 'junk';
+@import 'vars';
+
+.remove {
+  color: #{$junk-color};
+}
+
+.keep {
+  color: #{$keep-color};
+}

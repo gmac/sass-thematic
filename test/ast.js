@@ -8,7 +8,7 @@ function stylesheets(ast) {
   });
 }
 
-describe('basic overrides', function() {
+describe('Sass Abstract Syntax Tree', function() {
   var ast;
   var imports;
 
@@ -24,7 +24,7 @@ describe('basic overrides', function() {
     });
   });
 
-  it ('fulfills all stylesheet imports.', function() {
+  it ('fulfills all root imports.', function() {
     assert.equal(imports.length, 4);
   });
 
@@ -38,30 +38,28 @@ describe('basic overrides', function() {
     var sheet = imports[0];
     assert.equal(sheet.file, 'a');
     assert.equal(sheet.filepath, path.join(__dirname, 'style/ast/a.scss'));
-    console.log(sheet.importer.toString());
-    //assert.equal(sheet.importer.toString(), "@import 'a';");
+    assert.equal(sheet.importer.toString(), "@import 'a';");
   });
 
   it ('configures meta data for an underscore file import.', function() {
     var sheet = imports[1];
     assert.equal(sheet.file, 'b');
     assert.equal(sheet.filepath, path.join(__dirname, 'style/ast/_b.scss'));
-    console.log(sheet.importer.toString());
-    //assert.equal(sheet.importer.toString(), "@import 'b';");
+    assert.equal(sheet.importer.toString(), "@import 'b';");
   });
 
-  it ('configures meta data for an include path import.', function() {
+  it ('configures meta data for an includePaths import.', function() {
     var sheet = imports[2];
     assert.equal(sheet.file, 'base/main');
     assert.equal(sheet.filepath, path.join(__dirname, 'stylelib/base/main.scss'));
-    //assert.equal(sheet.importer.toString(), "@import 'base/main';");
+    assert.equal(sheet.importer.toString(), "@import 'base/main';");
   });
 
   it ('configures meta data for a directory path import.', function() {
     var sheet = imports[3];
     assert.equal(sheet.file, 'path');
     assert.equal(sheet.filepath, path.join(__dirname, 'style/ast/path'));
-    //assert.equal(sheet.importer.toString(), "@import 'path';");
+    assert.equal(sheet.importer.toString(), "@import 'path';");
   });
 
   describe('directory path imports', function() {

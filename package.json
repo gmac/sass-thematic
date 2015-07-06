@@ -14,5 +14,8 @@
   "dependencies": {
     "file-importer": "0.0.6",
     "gonzales-pe": "^3.0.0-31"
+  },
+  "peerDependencies": {
+    "node-sass": "^3.2.0"
   }
 }

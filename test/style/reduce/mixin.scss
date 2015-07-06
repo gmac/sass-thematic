@@ -11,20 +11,15 @@
   font-family: serif;
 }
 
-.junk {
-  @include mixin-junk;
-  color: $junk-color;
-}
-
-.keep {
-  @include mixin-keep;
-  color: $junk-color;
-}
-
 .nested {
   .junk {
     @include mixin-junk;
     color: $junk-color;
+  }
+
+  .keep {
+    @include mixin-junk;
+    color: $keep-color;
   }
 
   .keep {
