@@ -4,17 +4,17 @@
 
 ## The Problem:
 
-You're building a site that gets themed with customizable colors, fonts, sizes, etc. So, you set up a base stylesheet for the site, and then maintain a separate theme stylesheet for custom style overrides.
+We're building a site that gets themed with customizable colors, fonts, sizes, etc. So, we set up a base stylesheet for the site, and then maintain a separate theme stylesheet for custom style overrides.
 
 This works, but makes updating difficult. All changes in the base stylesheet must be mirrored in the theme-specific overrides. Keeping these stylesheets synchronized is tedious and error-prone. It would be great if we could just _automate_ the generation of these theme overrides from the base source...
 
-That is Sass Thematic.
+This is Sass Thematic.
 
 ## How it works:
 
-### 1. Configure
+### 1. Structure
 
-Provide file paths for your main Sass file, and for a vars file with all of your theme variables defined. We extract the names of all theme variables from this vars file. For example:
+First, we setup a sanctioned file in our Sass library that defines all theme variables. We'll extract the names of these theme variables when generating a theme stylesheet. For example:
 
 **In *_theme_vars.scss*:**
 
@@ -63,7 +63,7 @@ $other-color: red;
 }
 ```
 
-Now we run Sass Thematic with references to our theme variables file, and to our main Sass file. All Sass Thematic functions are configured similar to `node-sass`, with an `includePaths` option for resolving imports:
+Now we can run Sass Thematic with references to our theme variables file, and to our main Sass file. All Sass Thematic methods are run like `node-sass`, with an `includePaths` option for resolving imports:
 
 ```javascript
 var sassThematic = require('sass-thematic');
@@ -79,7 +79,7 @@ sassThematic.renderThemeSass({
 
 ### 2. Parse
 
-Next, we reconstitute our main Sass file's deeply-nested source tree of `@import` statements using [file-importer](https://github.com/gmac/file-importer), and then parse that flattened source into a complete abstract syntax tree (AST) using the fabulous [gonzales-pe](https://github.com/tonyganch/gonzales-pe) lexer.
+Next, we reconstitute our main Sass file's deeply-nested source tree of `@import` statements using [file-importer](https://github.com/gmac/file-importer), and then parse that flattened source into a complete abstract syntax tree (AST) using the fabulous [gonzales-pe](https://github.com/tonyganch/gonzales-pe) lexer:
 
 ```css
 $theme-color: green;
@@ -116,7 +116,7 @@ $other-color: red;
 
 ### 3. Prune
 
-Now we traverse the parsed AST, dropping any rulesets and/or declarations that do not implement a theme variable (dropped syntax is replaced by a comment). This pruning expands to `@include`, `@extend`, and many other inflected rule dependencies. This results in a minimal Sass file that can be compiled with new theme variables prepended.
+Now we traverse the parsed AST, dropping any rulesets and/or declarations that do not implement a theme variable (dropped syntax is replaced by a comment). This pruning accounts for `@include`, `@extend`, and many other inflected rule dependencies. This results in a minimal Sass file that can be compiled with new theme variables prepended:
 
 ```css
 // varsfile
@@ -152,7 +152,7 @@ Parsing theme variables into a view template is generally simpler to integrate w
 .include-theme { color: <%= theme-color %>; }
 ```
 
-The only caveat with generating templates is that variable names need to pass through the actual Sass compiler as _literals_, therefore we cannot use theme variables as function arguments (ie: `tint($this-will-explode)`) while generating templates.
+The only caveat with generating templates is that variable names need to pass through the actual Sass compiler as _literals_, therefore we cannot use theme variables in Sass function arguments (ex: `tint($this-will-explode)`) while generating templates.
 
 ## Install
 
