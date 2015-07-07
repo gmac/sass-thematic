@@ -255,23 +255,23 @@ sassThematic.renderThemeTemplate({
 
 #### Required for all methods, one or both:
 
-* **`file`**: String path to the main Sass file to load and parse. This may be an absolute path, or else a relative path from `process.cwd()` (or the provided `cwd` option).
+* **`file`**: String path to the main Sass file to load and parse. This may be an absolute path, or else a relative path from `cwd`.
 
 * **`data`**: A Sass string to parse. You may still provide a `file` option as filepath context for mapping imports.
 
 #### Required for theme parsing methods:
 
-* **`varsFile`**: String path to a file containing all theme variables. This may be an absolute path, or else a relative path from `process.cwd()` (or the provided `cwd` option). This file must contain all theme variable definitions, and nothing else.
+* **`varsFile`**: String path to a file containing all theme variables. This may be an absolute path, or else a relative path from `cwd`. This file must contain all theme variable definitions, and nothing else.
 
 #### Required for theme rendering methods, one of:
 
-* **`themeFile`**: String path to a file containing all theme variables to render CSS with. This may be an absolute path, or else a relative path from `process.cwd()` (or the provided `cwd` option).
+* **`themeFile`**: String path to a file containing all theme variables to render CSS with. This may be an absolute path, or else a relative path from `cwd`.
 
 * **`themeData`**: String data containing Sass variable definitions for all theme variables to render CSS with. Should be formatted as `$color1: red; $color2: black;`.
 
 #### Optional options:
 
-* **`includePaths`**: Array of base paths to search while performing file lookups. These should be absolute directory paths, or else relative to `process.cwd()` (or the provided `cwd` option). This works just like the `node-sass` option of the same name.
+* **`includePaths`**: Array of base paths to search while performing file lookups. These should be absolute directory paths, or else relative to `cwd`. This operates just like the `node-sass` option of the same name.
 
 * **`cwd`**: Path of the directory to resolve `file`, `varsFile`, `themeFile`,  and `includePaths` references from. Uses `process.cwd()` by default.
 
