@@ -1,8 +1,24 @@
-# sass-ast
+# Sass Theme
 
-Designed to reconstitute a Sass codebase into a single Abstract Syntax Tree (AST) of lexically-parsed grammar. This is useful for performing validations and/or extracting portions of your Sass styleset for tailored purposes.
+_A generator for theme stylesheets from Sass_
 
-Under the hood, `sass-ast` is just a lightweight bridge between the fabulous [gonzales-pe](https://github.com/tonyganch/gonzales-pe) CSS lexer, and [file-importer](https://github.com/gmac/file-importer) for reconstituiting source trees.
+## Problem Scenario
+
+You're building a site that may be themed with various configurations of colors, fonts, and sizes. To do this, you set up one base stylesheet for the site, and then add on a theme stylesheet with theme-specific style overrides.
+
+This works, however updating your stylesheets is now a hasstle. Any style modifications in the base stylesheet must also be reconciled in the theme-specific style override. Keeping these stylesheets in sync is laborious, and frustrating. It would be really neat if we could just automatically generate these override styles from the base stylesheet source.
+
+Sass Theme can help.
+
+## Here's How it Works
+
+**1. Configure.** Provide file paths to a Sass file to parse, and a vars file with all theme variables defined. We'll extract the names of all theme variables from the vars file.
+
+**2. Parse.** We reconstitute the Sass file's deeply-nested source tree of `@import` statements using [file-importer](https://github.com/gmac/file-importer), and then parse that flattened source into a complete abstract syntax tree (AST) using the fabulous [gonzales-pe](https://github.com/tonyganch/gonzales-pe).
+
+**3. Prune.** We traverse the parsed AST, dropping any rulesets and/or declarations that do not include a theme variable. Using some dynamic programming, we can extend this to `@include` and `@extend` rules as well. We reduce the Sass source down to the minimum set of rules implementing or extending theme variables. This provides a minimal Sass file that can be compiled with the variables for each theme.
+
+**4. Template.** Parsing Sass into custom assets for each theme is tedious. It's generally easier just to render the theme file into a view template. We can (optionally) choose to render our Sass theme file into flat CSS, passing through variable names as template fields, and then serve the theme CSS as a rendered view through our application.
 
 ## Install
 
