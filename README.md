@@ -216,7 +216,7 @@ sassThematic.parseThemeSass({
 
 ### sassThematic.renderThemeCSS( options, callback )
 
-Parses, prunes, and returns a rendered CSS string of selectors that implement your theme variables. A `varsFile` option is required to identify relevant theme variables. A `themeFile` or `themeData` option is required to provide variables used to render the CSS.
+Parses, prunes, compiles, and returns a rendered CSS string of selectors that implement your theme variables. A `varsFile` option is required to identify relevant theme variables. A `themeFile` or `themeData` option is required to provide variables used to render the CSS.
 
 ```javascript
 var sassThematic = require('sass-thematic');
@@ -226,8 +226,8 @@ sassThematic.renderThemeCSS({
   varsFile: './styles/_theme.scss',
   themeData: '$color1: red; $color2: green;',
   includePaths: ['./lib/']
-}, function(err, sassString) {
-   console.log(sassString);
+}, function(err, cssString) {
+   console.log(cssString);
 });
 ```
 
@@ -246,8 +246,8 @@ sassThematic.renderThemeTemplate({
   includePaths: ['./lib/'],
   templateOpen: '<%=',
   templateClose: '%>'
-}, function(err, sassString) {
-   console.log(sassString);
+}, function(err, templateString) {
+   console.log(templateString);
 });
 ```
 
