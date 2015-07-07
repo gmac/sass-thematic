@@ -264,4 +264,4 @@ Sass Thematic currently supports the following basic implementations:
 * Removing unthemed `@extend` implementations.
 * Removing unthemed loops (`@for`, `@each`), with basic local local variable inflection.
 
-This tool is a self-acknowledged 90% system that attempts to provide good automation for conventional usecases. Sass is an extremely complex and nuanced system, therefore all of these pruning implementations undoubtedly have holes. For best results, review the [tests specs](https://github.com/gmac/sass-thematic/test/styles) to see what capabilities exist, and moderate complexity while implementing theme variables.
+This tool is a self-acknowledged 90% system that attempts to provide good automation for conventional usecases. Sass is an extremely complex and nuanced system, therefore all of these pruning implementations undoubtedly have holes. For best results, review the [tests specs](https://github.com/gmac/sass-thematic/tree/master/test/style/reduce) to see what capabilities exist, and moderate complexity while implementing theme variables.
