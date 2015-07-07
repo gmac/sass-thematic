@@ -1,21 +1,31 @@
 {
-  "name": "sass-override-stylesheet",
-  "version": "0.0.0",
-  "description": "",
+  "name": "sass-thematic",
+  "version": "0.0.1",
+  "description": "A toolkit for generating customizable theme stylesheets from Sass.",
+  "keywords": [
+    "sass",
+    "theme",
+    "override"
+  ],
   "main": "index.js",
   "scripts": {
     "test": "node ./test/mocha.js"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Greg MacWilliam",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gmac/sass-thematic.git"
+  },
+  "github": "https://github.com/gmac/sass-thematic",
+  "license": "MIT",
   "devDependencies": {
     "mocha": "^2.2.5"
   },
   "dependencies": {
-    "file-importer": "0.0.6",
-    "gonzales-pe": "^3.0.0-31"
+    "file-importer": "^0.0.6",
+    "gonzales-pe": "3.0.0-31"
   },
   "peerDependencies": {
-    "node-sass": "^3.2.0"
+    "node-sass": "^2.1.1"
   }
 }

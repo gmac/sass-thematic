@@ -1,5 +1,5 @@
 var sassAST = require('./lib/ast');
-var Reducer = require('./lib/reduce');
+var Thematic = require('./lib/thematic');
 
 module.exports.parseAST = function(opts, done) {
   sassAST.parse(opts, done);
@@ -7,22 +7,26 @@ module.exports.parseAST = function(opts, done) {
 
 module.exports.parseThemeAST = function(opts, done) {
   sassAST.parse(opts, function(err, ast) {
-    var reducer = new Reducer(ast, opts).prune();
-    done(err, reducer.ast);
+    var theme = new Thematic(ast, opts).prune();
+    done(err, theme.ast);
   });
 };
 
 module.exports.renderThemeSass = function(opts, done) {
   sassAST.parse(opts, function(err, ast) {
-    var reducer = new Reducer(ast, opts).prune();
-    done(err, reducer.ast.toString());
+    var theme = new Thematic(ast, opts).prune();
+    done(err, theme.ast.toString());
+  });
+};
+
+module.exports.renderThemeCSS = function(opts, done) {
+  sassAST.parse(opts, function(err, ast) {
+    new Thematic(ast, opts).css(done);
   });
 };
 
 module.exports.renderThemeTemplate = function(opts, done) {
   sassAST.parse(opts, function(err, ast) {
-    var reducer = new Reducer(ast, opts).template(function(err, template) {
-      done(err, template);
-    });
+    new Thematic(ast, opts).template(done);
   });
 };
