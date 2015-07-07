@@ -10,13 +10,13 @@ Unfortunately, this makes updates a hasstle. Style changes in the base styleshee
 
 Thematic Sass can help.
 
-## Here's How it Works
+## Here's how it works
 
-**1. Configure.** Provide file paths to a Sass file to parse, and a vars file with all theme variables defined. We'll extract the names of all theme variables from the vars file.
+**1. Configure.** Provide file paths to your main Sass file, and to a vars file with all theme variables defined. We'll extract the names of all theme variables from this vars file.
 
 **2. Parse.** We reconstitute the Sass file's deeply-nested source tree of `@import` statements using [file-importer](https://github.com/gmac/file-importer), and then parse that flattened source into a complete abstract syntax tree (AST) using the fabulous [gonzales-pe](https://github.com/tonyganch/gonzales-pe).
 
-**3. Prune.** We traverse the parsed AST, dropping any rulesets and/or declarations that do not include a theme variable. Using some dynamic programming, we can extend this to `@include` and `@extend` rules as well. We reduce the Sass source down to the minimum set of rules implementing or extending theme variables. This provides a minimal Sass file that can be compiled with the variables for each theme.
+**3. Prune.** We traverse the parsed AST, dropping any rulesets and/or declarations that do not include a theme variable. With some dynamic programming, this pruning expands to `@include`, `@extend`, and other inflected rule dependencies. This process reduces the Sass down to a minimum set of rules which implement theme variables. This minimal Sass can then be compiled with a new set of theme variables.
 
 **4. Template.** Parsing Sass into custom assets for each theme is tedious. It's generally easier just to render the theme file into a view template. We can (optionally) choose to render our Sass theme file into flat CSS, passing through variable names as template fields, and then serve the theme CSS as a rendered view through our application.
 
