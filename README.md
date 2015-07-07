@@ -6,7 +6,7 @@ _A toolkit for generating customizable theme stylesheets from Sass_
 
 You're building a site that gets themed with customizable colors, fonts, sizes, etc. So, you set up a base stylesheet for the site, and then maintain a separate theme stylesheet for custom style overrides.
 
-Unfortunately, this turns style updates into a hasstle. Style adjustments in the base stylesheet must always be mirrored in the theme-specific override. Keeping these stylesheets in sync is laborious and frustrating. It would be really great if we could just automate the creation of these overrides from the base source.
+Unfortunately, this makes updates a hasstle. Style changes in the base stylesheet must always be mirrored in the theme-specific override. Keeping these stylesheets in sync becomes laborious and frustrating. It would be really great if we could _automate_ the creation of these overrides from the base source.
 
 Thematic Sass can help.
 
