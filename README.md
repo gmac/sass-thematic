@@ -6,15 +6,15 @@
 
 You're building a site that gets themed with customizable colors, fonts, sizes, etc. So, you set up a base stylesheet for the site, and then maintain a separate theme stylesheet for custom style overrides.
 
-This works, but makes updates difficult. Style changes in the base stylesheet must always be mirrored in the theme-specific overrides. Keeping these stylesheets synchronized is a laborious hassle. Wouldn't it be great if we could just _automate_ the generation of these theme overrides from the base source?
+This works, but makes updating difficult. All changes in the base stylesheet must be mirrored in the theme-specific overrides. Keeping these stylesheets synchronized is tedious and error-prone. It would be great if we could just _automate_ the generation of these theme overrides from the base source...
 
-Sass Thematic can help.
+That is Sass Thematic.
 
 ## How it works:
 
 ### 1. Configure
 
-Provide file paths to your main Sass file, and to a vars file with all your theme variables defined. We extract the names of all theme variables from this vars file.
+Provide file paths for your main Sass file, and for a vars file with all of your theme variables defined. We extract the names of all theme variables from this vars file. For example:
 
 **In *_theme_vars.scss*:**
 
@@ -63,7 +63,7 @@ $other-color: red;
 }
 ```
 
-Then run Sass Thematic with references to your theme variables file, and to your main Sass file. All Sass Thematic functions are configured similar to `node-sass` with an `includePaths` option for resolving imports.
+Now we run Sass Thematic with references to our theme variables file, and to our main Sass file. All Sass Thematic functions are configured similar to `node-sass`, with an `includePaths` option for resolving imports:
 
 ```javascript
 var sassThematic = require('sass-thematic');
@@ -72,14 +72,14 @@ sassThematic.renderThemeSass({
   varsFile: './styles/_vars.scss',
   file: './styles/main.scss',
   includePaths: ['./lib/']
-}, function(err, sass) {
-  // do stuff with your rendered theme Sass...
+}, function(err, sassString) {
+  console.log(sassString);
 });
 ```
 
 ### 2. Parse
 
-Next, we reconstitute your main Sass file's deeply-nested source tree of `@import` statements using [file-importer](https://github.com/gmac/file-importer), and then parse that flattened source into a complete abstract syntax tree (AST) using the fabulous [gonzales-pe](https://github.com/tonyganch/gonzales-pe) lexer.
+Next, we reconstitute our main Sass file's deeply-nested source tree of `@import` statements using [file-importer](https://github.com/gmac/file-importer), and then parse that flattened source into a complete abstract syntax tree (AST) using the fabulous [gonzales-pe](https://github.com/tonyganch/gonzales-pe) lexer.
 
 ```css
 $theme-color: green;
@@ -116,7 +116,7 @@ $other-color: red;
 
 ### 3. Prune
 
-Now we traverse the parsed AST, dropping any rulesets and/or declarations that do not implement a theme variable (dropped syntax is replaced by a comment). This pruning expands to `@include`, `@extend`, and many other inflected rule dependencies. This results in a minimal Sass file that can be compiled with other theme variables prepended.
+Now we traverse the parsed AST, dropping any rulesets and/or declarations that do not implement a theme variable (dropped syntax is replaced by a comment). This pruning expands to `@include`, `@extend`, and many other inflected rule dependencies. This results in a minimal Sass file that can be compiled with new theme variables prepended.
 
 ```css
 // varsfile
@@ -145,18 +145,18 @@ $other-color: red;
 
 ### 4. Template
 
-Parsing theme variables into a view template is generally simpler to integrate with an app than compiling custom assets for each theme. Therefore, we can render our Sass theme into flat CSS with variable names passed through as template fields.
+Parsing theme variables into a view template is generally simpler to integrate with an app than compiling custom assets for each theme. Therefore, we can render our Sass theme into flat CSS with variable names passed through as template fields:
 
 ```css
 .theme { color: <%= theme-color %>; }
 .include-theme { color: <%= theme-color %>; }
 ```
 
-The only caveat with generating templates is that variable names need to pass through the actual Sass compiler as _literals_, therefore we cannot put theme variables into Sass functions (`tint`, `shade`, etc) while generating templates.
+The only caveat with generating templates is that variable names need to pass through the actual Sass compiler as _literals_, therefore we cannot use theme variables as function arguments (ie: `tint($this-will-explode)`) while generating templates.
 
 ## Install
 
-Install NPM package:
+Install the NPM package:
 
 ```
 npm install sass-thematic --save-dev
@@ -188,7 +188,7 @@ Parses, prunes, and returns an abstract syntax tree of just your Sass that imple
 ```javascript
 var sassThematic = require('sass-thematic');
 
-sassThematic.parseAST({
+sassThematic.parseThemeAST({
   file: './styles/main.scss',
   varsFile: './styles/_theme.scss',
   includePaths: ['./lib/']
@@ -222,7 +222,7 @@ This method requires the `node-sass` library installed as a peer dependency. Als
 ```javascript
 var sassThematic = require('sass-thematic');
 
-sassThematic.renderThemeSass({
+sassThematic.renderThemeTemplate({
   file: './styles/main.scss',
   varsFile: './styles/_theme.scss',
   includePaths: ['./lib/'],
@@ -254,3 +254,14 @@ sassThematic.renderThemeSass({
 * **`templateOpen`**: The opening token for interpolation fields. Uses ERB-style `<%=` by default.
 
 * **`templateClose`**: The closing token for interpolation fields. Uses ERB-style `%>` by default.
+
+## Pruning
+
+Sass Thematic currently supports the following basic implementations:
+
+* Removing unthemed rulesets and declarations.
+* Removing unthemed mixins and their `@include` implementation.
+* Removing unthemed `@extend` implementations.
+* Removing unthemed loops (`@for`, `@each`), with basic local local variable inflection.
+
+This tool is a self-acknowledged 90% system that attempts to provide good automation for conventional usecases. Sass is an extremely complex and nuanced system, therefore all of these pruning implementations undoubtedly have holes. For best results, review the [tests specs](https://github.com/gmac/sass-thematic/test/styles) to see what capabilities exist, and moderate complexity while implementing theme variables.
