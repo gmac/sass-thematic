@@ -63,7 +63,7 @@ $other-color: red;
 }
 ```
 
-Now we can run Sass Thematic with references to our theme variables file, and to our main Sass file. All Sass Thematic methods are run like `node-sass`, with an `includePaths` option for resolving imports:
+Now we can run Sass Thematic with references to our theme variables file, and to our main Sass file. All Sass Thematic methods operate similar to `node-sass`, with an `includePaths` option for resolving imports:
 
 ```javascript
 var sassThematic = require('sass-thematic');
