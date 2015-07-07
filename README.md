@@ -269,6 +269,6 @@ This tool is a self-acknowledged 90% system that attempts to provide good automa
 
 ## Thanks
 
-This toolkit would be impossible without the hard work of @tonyganch on the [gonzales-pe](https://github.com/tonyganch/gonzales-pe) lexer, which provides the core structure for intelligently dismantling Sass files.
+This toolkit would be impossible without the hard work of [@tonyganch](https://github.com/tonyganch) on the [gonzales-pe](https://github.com/tonyganch/gonzales-pe) lexer, which provides the core structure for intelligently dismantling Sass files.
 
-Lovingly crafted at [Vox Media](http://voxmedia.com).
+Lovingly crafted at [Vox Media](http://voxmedia.com) ![](http://fonts.voxmedia.com/emoji/voxmedia.png).
