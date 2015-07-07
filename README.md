@@ -80,7 +80,7 @@ function(err, sassString) {
 
 ### 2. Parse
 
-Next, we reconstitute our main Sass file's deeply-nested source tree of `@import` statements using [file-importer](https://github.com/gmac/file-importer), and then parse that flattened source into a complete abstract syntax tree (AST) using the fabulous [gonzales-pe](https://github.com/tonyganch/gonzales-pe) lexer:
+Next, Sass Thematic reconstitutes our main Sass file's deeply-nested source tree of `@import` statements using [file-importer](https://github.com/gmac/file-importer), and then parses that flattened source into a complete abstract syntax tree (AST) using the fabulous [gonzales-pe](https://github.com/tonyganch/gonzales-pe) lexer:
 
 ```css
 $theme-color: green;
@@ -117,7 +117,7 @@ $other-color: red;
 
 ### 3. Prune
 
-Now we traverse the parsed AST, dropping any rulesets and/or declarations that do not implement a theme variable (dropped syntax is replaced by a comment). This pruning accounts for `@include`, `@extend`, and many other inflected rule dependencies. This results in a minimal Sass file that can be compiled with new theme variables prepended:
+Now Sass Thematic traverses the parsed AST, dropping any rulesets and/or declarations that do not implement a theme variable (dropped syntax is replaced by a comment). This pruning accounts for `@include`, `@extend`, and many other inflected rule dependencies. This results in a minimal Sass file that can be compiled with new theme variables prepended:
 
 ```css
 // varsfile
@@ -146,7 +146,7 @@ $other-color: red;
 
 ### 4. Template
 
-Parsing theme variables into a view template is generally simpler to integrate with an app than compiling custom assets for each theme. Therefore, we can render our Sass theme into flat CSS with variable names passed through as template fields:
+Parsing theme variables into a view template is generally simpler to integrate with a web application than compiling custom assets for each theme. Therefore, we can also render our Sass theme into flat CSS with variable names passed through as template fields:
 
 ```css
 .theme { color: <%= theme-color %>; }
