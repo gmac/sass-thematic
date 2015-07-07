@@ -10,15 +10,95 @@ Unfortunately, this makes updates a hasstle. Style changes in the base styleshee
 
 Thematic Sass can help.
 
-## Here's how it works
+## Here's how it works:
 
 **1. Configure.** Provide file paths to your main Sass file, and to a vars file with all theme variables defined. We'll extract the names of all theme variables from this vars file.
 
+```javascript
+ast.parse({
+  varsFile: './styles/_vars.scss',
+  file: './styles/main.scss',
+  includePaths: ['./lib/']
+}, function(err, source) {
+  // do stuff...
+});
+```
+
 **2. Parse.** We reconstitute the Sass file's deeply-nested source tree of `@import` statements using [file-importer](https://github.com/gmac/file-importer), and then parse that flattened source into a complete abstract syntax tree (AST) using the fabulous [gonzales-pe](https://github.com/tonyganch/gonzales-pe).
 
-**3. Prune.** We traverse the parsed AST, dropping any rulesets and/or declarations that do not include a theme variable. With some dynamic programming, this pruning expands to `@include`, `@extend`, and other inflected rule dependencies. This process reduces the Sass down to a minimum set of rules which implement theme variables. This minimal Sass can then be compiled with a new set of theme variables.
+```css
+// From `@import 'vars';`
+$keep-color: red;
 
-**4. Template.** Parsing Sass into custom assets for each theme is tedious. It's generally easier just to render the theme file into a view template. We can (optionally) choose to render our Sass theme file into flat CSS, passing through variable names as template fields, and then serve the theme CSS as a rendered view through our application.
+// From `@import 'junk';`
+$junk-color: red;
+
+// From `main.scss`
+
+@mixin mixin-junk {
+  color: $junk-color;
+}
+
+@mixin mixin-keep {
+  color: $keep-color;
+}
+
+.junk {
+  color: $junk-color;
+  font-family: serif;
+}
+
+.keep {
+  color: $keep-color;
+  font-family: serif;
+}
+
+.include-junk {
+  @include mixin-junk;
+}
+
+.include-keep {
+  @include mixin-keep;
+}
+```
+
+**3. Prune.** We traverse the parsed AST, dropping any rulesets and/or declarations that do not include a theme variable. With some dynamic programming, this pruning expands to `@include`, `@extend`, and other inflected rule dependencies. This process reduces the Sass down to a minimum set of rules which implement theme variables. This minimal Sass may be compiled with a custom set of theme variables.
+
+```css
+// From `@import 'vars';`
+$keep-color: red;
+
+// From `@import 'junk';`
+$junk-color: red;
+
+// From `main.scss`
+
+// mixin
+
+@mixin mixin-keep {
+  color: $keep-color;
+}
+
+// ruleset
+
+.keep {
+  color: $keep-color;
+  // declaration
+}
+
+// ruleset
+
+.include-keep {
+  @include mixin-keep;
+}
+```
+
+**4. Template.** Parsing custom variables into a view template is generally simpler than compiling custom assets for each theme. Thus, we can choose to render our Sass theme file into flat CSS, passing through variable names as template fields formatted for our desired templating language.
+
+```css
+.keep { color: <%= keep-color %>; }
+.include-keep { color: <%= keep-color %>; }
+```
 
 ## Install
 
