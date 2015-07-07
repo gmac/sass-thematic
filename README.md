@@ -153,7 +153,7 @@ Parsing theme variables into a view template is generally simpler to integrate t
 .include-theme { color: <%= theme-color %>; }
 ```
 
-The only caveat with generating templates is that variable names need to pass through the actual Sass compiler as _literals_, therefore we cannot use theme variables in Sass function arguments (ex: `tint($this-will-explode)`) while generating templates.
+The only caveat with generating templates is that variable names need to pass through the actual Sass compiler as _literals_, therefore we cannot use theme variables in Sass function arguments (ex: `tint($this-will-explode)`) when generating templates.
 
 ## Install
 
@@ -266,3 +266,9 @@ Sass Thematic currently supports the following basic implementations:
 * Removing unthemed loops (`@for`, `@each`), with basic local local variable inflection.
 
 This tool is a self-acknowledged 90% system that attempts to provide good automation for conventional usecases. Sass is an extremely complex and nuanced system, therefore all of these pruning implementations undoubtedly have holes. For best results, review the [tests specs](https://github.com/gmac/sass-thematic/tree/master/test/style/reduce) to see what capabilities exist, and moderate complexity while implementing theme variables.
+
+## Thanks
+
+This toolkit would be impossible without the hard work of @tonyganch on the [gonzales-pe](https://github.com/tonyganch/gonzales-pe) lexer, which provides the core structure for intelligently dismantling Sass files.
+
+Lovingly crafted at [Vox Media](http://voxmedia.com).
