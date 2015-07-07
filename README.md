@@ -72,7 +72,8 @@ sassThematic.renderThemeSass({
   varsFile: './styles/_vars.scss',
   file: './styles/main.scss',
   includePaths: ['./lib/']
-}, function(err, sassString) {
+},
+function(err, sassString) {
   console.log(sassString);
 });
 ```
