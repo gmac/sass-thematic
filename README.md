@@ -267,7 +267,7 @@ Sass Thematic currently supports the following basic implementations:
 
 This tool is a self-acknowledged 90% system that attempts to provide good automation for conventional usecases. Sass is an extremely complex and nuanced system, therefore all of these pruning implementations undoubtedly have holes. For best results, review the [tests specs](https://github.com/gmac/sass-thematic/tree/master/test/style/reduce) to see what capabilities exist, and moderate complexity while implementing theme variables.
 
-## Credits
+## Credit
 
 This toolkit would be impossible without the hard work of [@tonyganch](https://github.com/tonyganch) on the [gonzales-pe](https://github.com/tonyganch/gonzales-pe) lexer, which provides the framework for intelligently dismantling Sass.
 
