@@ -5,7 +5,7 @@ describe('directive reducer', function() {
   var linefeed;
 
   before(function(done) {
-    sassThematic.renderThemeSass({
+    sassThematic.parseThemeSass({
       varsFile: 'style/reduce/_vars.scss',
       file: 'style/reduce/directive.scss',
       cwd: __dirname,

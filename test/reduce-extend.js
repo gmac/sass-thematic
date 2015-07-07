@@ -5,7 +5,7 @@ describe('@extend reducer', function() {
   var linefeed;
 
   before(function(done) {
-    sassThematic.renderThemeSass({
+    sassThematic.parseThemeSass({
       varsFile: 'style/reduce/_vars.scss',
       file: 'style/reduce/extend.scss',
       cwd: __dirname,

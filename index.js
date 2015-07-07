@@ -12,7 +12,7 @@ module.exports.parseThemeAST = function(opts, done) {
   });
 };
 
-module.exports.renderThemeSass = function(opts, done) {
+module.exports.parseThemeSass = function(opts, done) {
   sassAST.parse(opts, function(err, ast) {
     var theme = new Thematic(ast, opts).prune();
     done(err, theme.ast.toString());

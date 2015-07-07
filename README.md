@@ -68,7 +68,7 @@ Now we can run Sass Thematic with references to our theme variables file, and to
 ```javascript
 var sassThematic = require('sass-thematic');
 
-sassThematic.renderThemeSass({
+sassThematic.parseThemeSass({
   varsFile: './styles/_vars.scss',
   file: './styles/main.scss',
   includePaths: ['./lib/']
@@ -198,14 +198,14 @@ sassThematic.parseThemeAST({
 });
 ```
 
-### sassThematic.renderThemeSass( options, callback )
+### sassThematic.parseThemeSass( options, callback )
 
 Parses, prunes, and returns a rendered Sass string of rules that implement your theme variables. A `varsFile` option is required to identify relevant theme variables. The returned string is raw Sass with all theme variable imports removed. You may prepend new theme variable definitions onto this Sass string and run it through the Sass compiler.
 
 ```javascript
 var sassThematic = require('sass-thematic');
 
-sassThematic.renderThemeSass({
+sassThematic.parseThemeSass({
   file: './styles/main.scss',
   varsFile: './styles/_theme.scss',
   includePaths: ['./lib/']
@@ -272,6 +272,9 @@ sassThematic.renderThemeTemplate({
 * **`templateOpen`**: The opening token for interpolation fields. Uses ERB-style `<%=` by default.
 
 * **`templateClose`**: The closing token for interpolation fields. Uses ERB-style `%>` by default.
+
+* **`outputStyle`**: For rendering methods, this option is passed through to the Sass compiler to define output format. See [node-sass](https://www.npmjs.com/package/node-sass) docs for possible values.
+
 
 ## Sass dependency
 

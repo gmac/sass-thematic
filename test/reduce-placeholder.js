@@ -5,7 +5,7 @@ describe('@extend placeholder reducer', function() {
   var linefeed;
 
   before(function(done) {
-    sassThematic.renderThemeSass({
+    sassThematic.parseThemeSass({
       varsFile: 'style/reduce/_vars.scss',
       file: 'style/reduce/placeholder.scss',
       cwd: __dirname,
