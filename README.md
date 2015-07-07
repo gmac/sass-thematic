@@ -146,7 +146,7 @@ $other-color: red;
 
 ### 4. Template
 
-Parsing theme variables into a view template is generally simpler to integrate with a web application than compiling custom assets for each theme. Therefore, we can also render our Sass theme into flat CSS with variable names passed through as template fields:
+Parsing theme variables into a view template is generally simpler to integrate than compiling custom assets for each theme. Therefore, we can also render our Sass theme into flat CSS with variable names passed through as template fields:
 
 ```css
 .theme { color: <%= theme-color %>; }
