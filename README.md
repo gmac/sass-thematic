@@ -6,7 +6,7 @@
 
 We're building a site that gets themed with customizable colors, fonts, sizes, etc. So, we set up a base stylesheet for the site, and then maintain a separate theme stylesheet for custom style overrides.
 
-This works, but makes updating difficult. All changes in the base stylesheet must be mirrored in the theme-specific overrides. Keeping these stylesheets synchronized is tedious and error-prone. It would be great if we could just _automate_ the generation of these theme overrides from the base source...
+This works, but makes updates difficult. All changes in the base stylesheet must be mirrored in the theme-specific overrides. Keeping these stylesheets synchronized is tedious and error-prone. It would be great if we could just _automate_ the generation of these theme overrides from the base source...
 
 This is Sass Thematic.
 
@@ -263,15 +263,23 @@ sassThematic.renderThemeTemplate({
 
 * **`varsFile`**: String path to a file containing all theme variables. This may be an absolute path, or else a relative path from `process.cwd()` (or the provided `cwd` option). This file must contain all theme variable definitions, and nothing else.
 
+#### Required for theme rendering methods, one of:
+
+* **`themeFile`**: String path to a file containing all theme variables to render CSS with. This may be an absolute path, or else a relative path from `process.cwd()` (or the provided `cwd` option).
+
+* **`themeData`**: String data containing Sass variable definitions for all theme variables to render CSS with. Should be formatted as `$color1: red; $color2: black;`.
+
 #### Optional options:
 
-* **`includePaths`**: Array of base paths to search while perform file lookups. These should be absolute directory paths, or else relative to `process.cwd()` (or the provided `cwd` option). This works just like the `node-sass` option of the same name.
+* **`includePaths`**: Array of base paths to search while performing file lookups. These should be absolute directory paths, or else relative to `process.cwd()` (or the provided `cwd` option). This works just like the `node-sass` option of the same name.
 
-* **`cwd`**: Path of the directory to resolve `file`, `varsFile`,  and `includePaths` references from. Uses `process.cwd()` by default.
+* **`cwd`**: Path of the directory to resolve `file`, `varsFile`, `themeFile`,  and `includePaths` references from. Uses `process.cwd()` by default.
 
-* **`templateOpen`**: The opening token for interpolation fields. Uses ERB-style `<%=` by default.
+* **`templateOpen`**: The opening token for template interpolation fields. Uses ERB-style `<%=` by default.
 
-* **`templateClose`**: The closing token for interpolation fields. Uses ERB-style `%>` by default.
+* **`templateClose`**: The closing token for template interpolation fields. Uses ERB-style `%>` by default.
+
+* **`templateSnakeCase`**: Boolean. Set as `true` to transform all template variable names to `snake_case` (lowercase with underscores).
 
 * **`outputStyle`**: For rendering methods, this option is passed through to the Sass compiler to define output format. See [node-sass](https://www.npmjs.com/package/node-sass) docs for possible values.
 
@@ -292,10 +300,11 @@ Sass Thematic currently supports the following basic implementations:
 * Removing unthemed `@extend` implementations.
 * Removing unthemed loops (`@for`, `@each`), with basic local local variable inflection.
 
-This tool is a self-acknowledged 90% system that attempts to provide good automation for conventional usecases. Sass is an extremely complex and nuanced system, therefore all of these pruning implementations undoubtedly have holes. For best results, review the [tests specs](https://github.com/gmac/sass-thematic/tree/master/test/style/reduce) to see what capabilities exist, and moderate complexity while implementing theme variables.
+This tool is a self-acknowledged 90% system that attempts to provide good automation for conventional use cases. Sass is a complex and nuanced language, therefore all of these pruning implementations undoubtedly have holes. For best results, review the [tests specs](https://github.com/gmac/sass-thematic/tree/master/test/style/reduce) to see what capabilities exist, and moderate complexity while implementing theme variables.
+
 
 ## Credit
 
-This toolkit would be impossible without the hard work of [@tonyganch](https://github.com/tonyganch) on the [gonzales-pe](https://github.com/tonyganch/gonzales-pe) lexer, which provides the framework for intelligently dismantling Sass.
+This toolkit would be impossible without the hard work of [@tonyganch](https://github.com/tonyganch) on the [gonzales-pe](https://github.com/tonyganch/gonzales-pe) lexer, which provides the framework for intelligently dismantling Sass. Serious kudos.
 
-Brought to you by [Vox Media](http://voxmedia.com). <img src="http://fonts.voxmedia.com/emoji/voxmedia.png" alt="" width="15" height="15">
+Brought to you by [Vox Media](http://voxmedia.com). <img src="http://fonts.voxmedia.com/emoji/voxmedia.png" alt="" width="15" height="15" style="width:15px;">
