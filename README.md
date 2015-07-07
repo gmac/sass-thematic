@@ -214,6 +214,23 @@ sassThematic.renderThemeSass({
 });
 ```
 
+### sassThematic.renderThemeCSS( options, callback )
+
+Parses, prunes, and returns a rendered CSS string of selectors that implement your theme variables. A `varsFile` option is required to identify relevant theme variables. A `themeFile` or `themeData` option is required to provide variables used to render the CSS.
+
+```javascript
+var sassThematic = require('sass-thematic');
+
+sassThematic.renderThemeCSS({
+  file: './styles/main.scss',
+  varsFile: './styles/_theme.scss',
+  themeData: '$color1: red; $color2: green;',
+  includePaths: ['./lib/']
+}, function(err, sassString) {
+   console.log(sassString);
+});
+```
+
 ### sassThematic.renderThemeTemplate( options, callback )
 
 Parses, prunes, compiles, and returns a rendered template string of flat CSS rules that implement your theme variables. A `varsFile` option is required to identify relevant theme variables. The returned string is flat CSS with interpolation fields (ie: `<%= var %>`) wrapping theme variables.
@@ -255,6 +272,13 @@ sassThematic.renderThemeTemplate({
 * **`templateOpen`**: The opening token for interpolation fields. Uses ERB-style `<%=` by default.
 
 * **`templateClose`**: The closing token for interpolation fields. Uses ERB-style `%>` by default.
+
+## Sass dependency
+
+You may select your own `node-sass` version to install as a peer dependency; Sass Thematic and has been designed to work with versions 2.x and 3.x.
+
+The actual `node-sass` compiler is only used for rendering theme CSS and templates. All AST assembly and tree parsing is performed by other tools.
+
 
 ## Pruning
 

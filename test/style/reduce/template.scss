@@ -1,0 +1,30 @@
+@import 'junk';
+@import 'vars';
+
+@mixin mixin-junk {
+  color: $junk-color;
+  font-family: serif;
+}
+
+@mixin mixin-keep {
+  color: $keep-color;
+  font-family: serif;
+}
+
+.junk {
+  color: $junk-color;
+  font-family: serif;
+}
+
+.keep {
+  color: $keep-color;
+  font-family: serif;
+}
+
+.include-junk {
+  @include mixin-junk;
+}
+
+.include-keep {
+  @include mixin-keep;
+}

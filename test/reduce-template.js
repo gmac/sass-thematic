@@ -1,24 +1,25 @@
 var assert = require('assert');
 var sassThematic = require('../index');
 
-describe('ERB Output', function() {
-  var linefeed;
+describe('template output', function() {
+  var template;
 
   before(function(done) {
     sassThematic.renderThemeTemplate({
-      templateOpen: '<%=',
-      templateClose: '%>',
+      templateOpen: '<<',
+      templateClose: '>>',
+      templateSnakeCase: true,
+      templateOutputStyle: 'compressed',
       varsFile: 'style/reduce/_vars.scss',
-      file: 'style/reduce/all.scss',
+      file: 'style/reduce/template.scss',
       cwd: __dirname,
-    }, function(err, template) {
-      console.log(template);
+    }, function(err, src) {
+      template = src.trim();
       done();
     });
   });
 
-  it ('does stuff...', function() {
-    //assert.equal(linefeed(10, 1), '// ruleset');
+  it ('renders flattened CSS with interpolations wrapping variable names.', function() {
+    assert.equal(template, '.keep{color:<< keep_color >>}.include-keep{color:<< keep_color >>}');
   });
-
 });
