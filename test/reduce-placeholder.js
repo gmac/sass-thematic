@@ -1,11 +1,11 @@
 var assert = require('assert');
-var overrides = require('../index');
+var sassThematic = require('../index');
 
 describe('@extend placeholder reducer', function() {
   var linefeed;
 
   before(function(done) {
-    overrides.render({
+    sassThematic.renderThemeSass({
       varsFile: 'style/reduce/_vars.scss',
       file: 'style/reduce/placeholder.scss',
       cwd: __dirname,

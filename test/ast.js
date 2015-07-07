@@ -1,6 +1,6 @@
 var path = require('path');
 var assert = require('assert');
-var overrides = require('../index');
+var sassThematic = require('../index');
 
 function stylesheets(ast) {
   return ast.content.filter(function(node) {
@@ -13,7 +13,7 @@ describe('Sass Abstract Syntax Tree', function() {
   var imports;
 
   before(function(done) {
-    overrides.parseAST({
+    sassThematic.parseAST({
       cwd: __dirname,
       file: 'style/ast/main.scss',
       includePaths: ['./stylelib/']

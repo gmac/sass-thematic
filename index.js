@@ -1,20 +1,28 @@
 var sassAST = require('./lib/ast');
-var reducer = require('./lib/reduce');
+var Reducer = require('./lib/reduce');
 
 module.exports.parseAST = function(opts, done) {
   sassAST.parse(opts, done);
 };
 
-module.exports.parse = function(opts, done) {
+module.exports.parseThemeAST = function(opts, done) {
   sassAST.parse(opts, function(err, ast) {
-    ast = reducer.parse(ast, opts);
-    done(err, ast);
+    var reducer = new Reducer(ast, opts).prune();
+    done(err, reducer.ast);
   });
 };
 
-module.exports.render = function(opts, done) {
+module.exports.renderThemeSass = function(opts, done) {
   sassAST.parse(opts, function(err, ast) {
-    ast = reducer.parse(ast, opts);
-    done(err, ast.toString());
+    var reducer = new Reducer(ast, opts).prune();
+    done(err, reducer.ast.toString());
+  });
+};
+
+module.exports.renderThemeTemplate = function(opts, done) {
+  sassAST.parse(opts, function(err, ast) {
+    var reducer = new Reducer(ast, opts).template(function(err, template) {
+      done(err, template);
+    });
   });
 };

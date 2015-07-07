@@ -1,17 +1,18 @@
 var assert = require('assert');
-var overrides = require('../index');
+var sassThematic = require('../index');
 
 describe('ERB Output', function() {
   var linefeed;
 
   before(function(done) {
-    overrides.parse({
-      templatize: '<%= VAR %>',
+    sassThematic.renderThemeTemplate({
+      templateOpen: '<%=',
+      templateClose: '%>',
       varsFile: 'style/reduce/_vars.scss',
       file: 'style/reduce/all.scss',
       cwd: __dirname,
     }, function(err, template) {
-      console.log(template.css.toString());
+      console.log(template);
       done();
     });
   });

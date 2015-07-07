@@ -1,11 +1,11 @@
 var assert = require('assert');
-var overrides = require('../index');
+var sassThematic = require('../index');
 
 describe('basic reducer', function() {
   var linefeed;
 
   before(function(done) {
-    overrides.render({
+    sassThematic.renderThemeSass({
       varsFile: 'style/reduce/_vars.scss',
       file: 'style/reduce/basic.scss',
       cwd: __dirname,
