@@ -63,7 +63,7 @@ $other-color: red;
 }
 ```
 
-Now we can run Sass Thematic with references to our theme variables file, and to our main Sass file. All Sass Thematic methods operate similar to [node-sass](https://www.npmjs.com/package/node-sass), with an `includePaths` option for resolving imports:
+Now we can run Thematic with references to our theme variables file, and to our main Sass file. All Thematic methods operate similar to [node-sass](https://www.npmjs.com/package/node-sass), with an `includePaths` option for resolving imports:
 
 ```javascript
 var sassThematic = require('sass-thematic');
@@ -80,7 +80,7 @@ function(err, sassString) {
 
 ### 2. Parse
 
-Next, Sass Thematic reconstitutes our main Sass file's deeply-nested source tree of `@import` statements using [file-importer](https://github.com/gmac/file-importer), and then parses that flattened source into a complete abstract syntax tree (AST) using the fabulous [gonzales-pe](https://github.com/tonyganch/gonzales-pe) lexer:
+Next, Thematic reconstitutes our main Sass file's deeply-nested source tree of `@import` statements using [file-importer](https://github.com/gmac/file-importer), and then parses that flattened source into a complete abstract syntax tree (AST) using the fabulous [gonzales-pe](https://github.com/tonyganch/gonzales-pe) lexer:
 
 ```css
 $theme-color: green;
@@ -117,7 +117,7 @@ $other-color: red;
 
 ### 3. Prune
 
-Now Sass Thematic traverses the parsed AST, dropping any rulesets and/or declarations that do not implement a theme variable (dropped syntax is replaced by a comment). This pruning accounts for `@include`, `@extend`, and many other inflected rule dependencies. This results in a minimal Sass file that can be compiled with new theme variables prepended:
+Now Thematic traverses the parsed AST, dropping any rulesets and/or declarations that do not implement a theme variable (dropped syntax is replaced by a comment). This pruning accounts for `@include`, `@extend`, and many other inflected rule dependencies. This results in a minimal Sass file that can be compiled with new theme variables prepended:
 
 ```css
 // varsfile
@@ -286,14 +286,14 @@ sassThematic.renderThemeTemplate({
 
 ## Sass dependency
 
-You may select your own `node-sass` version to install as a peer dependency; Sass Thematic and has been designed to work with versions 2.x and 3.x.
+You may select your own `node-sass` version to install as a peer dependency; Thematic and has been designed to work with versions 2.x and 3.x.
 
 The actual `node-sass` compiler is only used for rendering theme CSS and templates. All AST assembly and tree parsing is performed by other tools.
 
 
 ## Pruning
 
-Sass Thematic currently supports the following basic implementations:
+Thematic currently supports the following basic implementations:
 
 * Removing unthemed rulesets and declarations.
 * Removing unthemed mixins and their `@include` implementation.
