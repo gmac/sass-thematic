@@ -45,4 +45,8 @@ describe('basic reducer', function() {
   it ('keeps nested rulesets with override variables, but drops other declarations.', function() {
     assert.equal(linefeed(17, 4), '.keep { color: $keep-color; // declaration; }');
   });
+
+  it ('keeps rulesets flagged with an "@sass-thematic-keep" singleline comment.', function() {
+    assert.equal(linefeed(23, 3), '.keep { // @sass-thematic-keep }');
+  });
 });

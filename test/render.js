@@ -18,8 +18,8 @@ describe('sass rendering', function() {
 
   it ('compiles CSS templates with interpolations wrapping variable names.', function(done) {
     sassThematic.renderThemeTemplate({
-      templateOpen: '<<',
-      templateClose: '>>',
+      templateOpen: '<< ',
+      templateClose: ' >>',
       templateSnakeCase: true,
       outputStyle: 'compressed',
       varsFile: 'style/render/_vars.scss',
