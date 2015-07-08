@@ -1,4 +1,4 @@
-![Sass Thematic](title.png)
+![SassThematic](title.png)
 
 **A toolkit for generating customizable theme stylesheets from Sass.**
 
@@ -8,7 +8,7 @@ We're building a site that gets themed with customizable colors, fonts, sizes, e
 
 This works, but makes updates difficult. All changes in the base stylesheet must be mirrored in the theme-specific overrides. Keeping these stylesheets synchronized is tedious and error-prone. It would be great if we could just _automate_ the generation of these theme overrides from the base source...
 
-This is Sass Thematic.
+This is SassThematic.
 
 ## How it works:
 
@@ -63,7 +63,7 @@ $other-color: red;
 }
 ```
 
-Now we can run Thematic with references to our theme variables file, and to our main Sass file. All Thematic methods operate similar to [node-sass](https://www.npmjs.com/package/node-sass), with an `includePaths` option for resolving imports:
+Now we can run SassThematic with references to our theme variables file, and to our main Sass file. All Thematic methods operate similar to [node-sass](https://www.npmjs.com/package/node-sass), with an `includePaths` option for resolving imports:
 
 ```javascript
 var sassThematic = require('sass-thematic');
@@ -80,7 +80,7 @@ function(err, sassString) {
 
 ### 2. Parse
 
-Next, Thematic reconstitutes our main Sass file's deeply-nested source tree of `@import` statements using [file-importer](https://github.com/gmac/file-importer), and then parses that flattened source into a complete abstract syntax tree (AST) using the fabulous [gonzales-pe](https://github.com/tonyganch/gonzales-pe) lexer:
+Next, SassThematic reconstitutes our main Sass file's deeply-nested source tree of `@import` statements using [file-importer](https://github.com/gmac/file-importer), and then parses that flattened source into a complete abstract syntax tree (AST) using the fabulous [gonzales-pe](https://github.com/tonyganch/gonzales-pe) lexer:
 
 ```css
 $theme-color: green;
@@ -117,7 +117,7 @@ $other-color: red;
 
 ### 3. Prune
 
-Now Thematic traverses the parsed AST, dropping any rulesets and/or declarations that do not implement a theme variable (dropped syntax is replaced by a comment). This pruning accounts for `@include`, `@extend`, and many other inflected rule dependencies. This results in a minimal Sass file that can be compiled with new theme variables prepended:
+Now SassThematic traverses the parsed AST, dropping any rulesets and/or declarations that do not implement a theme variable (dropped syntax is replaced by a comment). This pruning accounts for `@include`, `@extend`, and many other inflected rule dependencies. This results in a minimal Sass file that can be compiled with new theme variables prepended:
 
 ```css
 // varsfile
@@ -165,7 +165,7 @@ npm install sass-thematic --save-dev
 
 ## API
 
-Sass Thematic provides the following API. All methods take roughly the same options, which are fully [outlined below](#full-api-options).
+SassThematic provides the following API. All methods take roughly the same options, which are fully [outlined below](#full-api-options).
 
 ### sassThematic.parseAST( options, callback )
 
@@ -286,19 +286,19 @@ sassThematic.renderThemeTemplate({
 
 ## Sass dependency
 
-You may select your own `node-sass` version to install as a peer dependency; Thematic and has been designed to work with versions 2.x and 3.x.
+You may select your own `node-sass` version to install as a peer dependency; SassThematic has been designed to work with versions 2.x and 3.x.
 
 The actual `node-sass` compiler is only used for rendering theme CSS and templates. All AST assembly and tree parsing is performed by other tools.
 
 
 ## Pruning
 
-Thematic currently supports the following basic implementations:
+SassThematic currently supports the following basic implementations:
 
 * Removing unthemed rulesets and declarations.
 * Removing unthemed mixins and their `@include` implementation.
 * Removing unthemed `@extend` implementations.
-* Removing unthemed loops (`@for`, `@each`), with basic local local variable inflection.
+* Removing unthemed loops (`@for`, `@each`), with basic local variable inflection.
 
 This tool is a self-acknowledged 90% system that attempts to provide good automation for conventional use cases. Sass is a complex and nuanced language, therefore all of these pruning implementations undoubtedly have holes. For best results, review the [tests specs](https://github.com/gmac/sass-thematic/tree/master/test/style/reduce) to see what capabilities exist, and moderate complexity while implementing theme variables.
 
