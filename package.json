@@ -1,6 +1,6 @@
 {
   "name": "sass-thematic",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A toolkit for generating customizable theme stylesheets from Sass.",
   "keywords": [
     "sass",

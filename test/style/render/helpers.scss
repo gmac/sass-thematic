@@ -1,0 +1,8 @@
+@import 'junk';
+@import 'vars';
+
+@if $sass-thematic {
+  .keep {
+    color: sass-thematic-var('keep-color');
+  }
+}

@@ -31,4 +31,19 @@ describe('sass rendering', function() {
     });
   });
 
+  it ('compiles CSS templates with fields inserted via the "sass-thematic-var" helper function.', function(done) {
+    sassThematic.renderThemeTemplate({
+      templateOpen: '<< ',
+      templateClose: ' >>',
+      templateSnakeCase: true,
+      outputStyle: 'compressed',
+      varsFile: 'style/render/_vars.scss',
+      file: 'style/render/helpers.scss',
+      cwd: __dirname,
+    }, function(err, src) {
+      assert.equal(src.trim(), '.keep{color:<< keep_color >>}');
+      done();
+    });
+  });
+
 });
