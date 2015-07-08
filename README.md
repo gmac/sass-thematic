@@ -1,6 +1,6 @@
 ![SassThematic](title.png)
 
-**A toolkit for generating customizable theme stylesheets from Sass.**
+**A framework for generating dynamic theme stylesheets from Sass.**
 
 ## The Problem:
 
