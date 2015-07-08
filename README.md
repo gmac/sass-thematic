@@ -63,7 +63,7 @@ $other-color: red;
 }
 ```
 
-Now we can run SassThematic with references to our theme variables file, and to our main Sass file. All Thematic methods operate similar to [node-sass](https://www.npmjs.com/package/node-sass), with an `includePaths` option for resolving imports:
+Now we can run SassThematic with references to our theme variables file, and to our main Sass file. All SassThematic methods operate similar to [node-sass](https://www.npmjs.com/package/node-sass), with an `includePaths` option for resolving imports:
 
 ```javascript
 var sassThematic = require('sass-thematic');
@@ -153,7 +153,7 @@ Parsing theme variables into a view template is generally simpler to integrate t
 .include-theme { color: <%= theme-color %>; }
 ```
 
-The only caveat with generating templates is that variable names need to pass through the actual Sass compiler as _literals_, therefore we cannot use theme variables in Sass function arguments (ex: `tint($this-will-explode)`) when generating templates.
+The only caveat with generating templates is that variable names need to pass through the actual Sass compiler as _literals_, therefore we cannot use theme variables as function arguments (ie: `tint($this-will-explode, 10)`) or in math expressions (ie: `$sad-trombone * 0.5`).
 
 ## Install
 
@@ -235,7 +235,7 @@ sassThematic.renderThemeCSS({
 
 Parses, prunes, compiles, and returns a rendered template string of flat CSS rules that implement your theme variables. A `varsFile` option is required to identify relevant theme variables. The returned string is flat CSS with interpolation fields (ie: `<%= var %>`) wrapping theme variables.
 
-This method requires the `node-sass` library installed as a peer dependency. Also note, variable names must pass through the Sass compiler as literals, therefore theme variables may NOT be used as function arguments (ie: `tint($this-will-explode)`).
+This method requires the `node-sass` library installed as a peer dependency. Also note, variable names must pass through the Sass compiler as literals, therefore theme variables may NOT be used as function arguments (ie: `tint($this-will-explode, 10)`) or in math expressions (ie: `$sad-trombone * 0.5`).
 
 ```javascript
 var sassThematic = require('sass-thematic');
