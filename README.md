@@ -302,6 +302,44 @@ SassThematic currently supports the following basic implementations:
 
 This tool is a self-acknowledged 90% system that attempts to provide good automation for conventional use cases. Sass is a complex and nuanced language, therefore all of these pruning implementations undoubtedly have holes. For best results, review the [tests specs](https://github.com/gmac/sass-thematic/tree/master/test/style/reduce) to see what capabilities exist, and moderate complexity while implementing theme variables.
 
+## Gulp Pipe
+
+It's pretty simple to setup a Gulp pipe that hooks multiple Sass entry point files into SassThematic. Use the following as a basic template:
+
+```javascript
+var gulp = require('gulp');
+var vinyl = require('vinyl');
+var through2 = require('through2');
+var sassThematic = require('sass-thematic');
+
+// SassThematic Gulp pipe:
+function sassTheme(opts) {
+  var output = '';
+  return through2.obj(function(file, enc, done) {
+      opts.file = file.path;
+      opts.data = file.contents.toString('utf-8');
+      
+      sassThematic.parseThemeSass(opts, function(err, result) {
+        output += result;
+        done();
+      });
+    },
+    function(done) {
+      this.push(new vinyl({
+        path: 'theme.scss',
+        contents: new Buffer(output)
+      }));
+      done();
+    });
+}
+
+// Then use it...
+gulp.task('theme', function() {
+  return gulp.src('components/**/index.scss')
+    .pipe(sassTheme({ ... opts ...}))
+    .pipe(gulp.dest('/path/to/output/dir'));
+});
+```
 
 ## Credit
 
