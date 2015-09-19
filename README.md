@@ -3,8 +3,7 @@
 **A framework for generating dynamic theme stylesheets from Sass.**
 
 * [How it works](#how-it-works)
-* [Installation](#install)
-* [API](#api)
+* [Installation & API](#install)
 * [Full API options](#full-api-options)
 * [Gulp integration](#gulp-pipe)
 * [Credits](#credit)
