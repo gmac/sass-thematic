@@ -4,7 +4,8 @@
 
 * [How it works](#how-it-works)
 * [Installation](#install)
-* [API & options](#api)
+* [API](#api)
+* [Full API options](#full-api-options)
 * [Gulp integration](#gulp-pipe)
 * [Credits](#credit)
 
