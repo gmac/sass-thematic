@@ -2,6 +2,12 @@
 
 **A framework for generating dynamic theme stylesheets from Sass.**
 
+* [How it works](#how-it-works)
+* [Installation](#install)
+* [API & options](#api)
+* [Gulp integration](#gulp-pipe)
+* [Credits](#credit)
+
 ## The Problem:
 
 We're building a site that gets themed with customizable colors, fonts, sizes, etc. So, we set up a base stylesheet for the site, and then maintain a separate theme stylesheet for custom style overrides.
