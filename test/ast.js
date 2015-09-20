@@ -62,6 +62,18 @@ describe('Sass Abstract Syntax Tree', function() {
     assert.equal(sheet.importer.toString(), "@import 'path';");
   });
 
+  it ('ignores @import file references ending with a ".css" extension.', function() {
+    assert(ast.toString().indexOf("@import 'test.css';") > -1);
+  });
+
+  it ('ignores @import file references starting with a "http:" protocol.', function() {
+    assert(ast.toString().indexOf("@import 'http://test.css';") > -1);
+  });
+
+  it ('ignores @import file references for "url()" wrappers.', function() {
+    assert(ast.toString().indexOf("@import url('test.css');") > -1);
+  });
+
   describe('directory path imports', function() {
 
     var pathImports;

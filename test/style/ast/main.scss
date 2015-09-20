@@ -2,3 +2,7 @@
 @import 'b';
 @import 'base/main';
 @import 'path';
+
+@import 'test.css';
+@import 'http://test.css';
+@import url('test.css');
