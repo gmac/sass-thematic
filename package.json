@@ -1,6 +1,6 @@
 {
   "name": "sass-thematic",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A framework for generating dynamic theme stylesheets from Sass.",
   "keywords": [
     "sass",
@@ -8,6 +8,7 @@
     "override"
   ],
   "main": "index.js",
+  "loader": "index-webpack.js",
   "scripts": {
     "test": "node ./test/mocha.js"
   },
@@ -22,7 +23,7 @@
     "mocha": "^2.2.5"
   },
   "dependencies": {
-    "file-importer": "^0.0.6",
+    "file-importer": "^1.0.0",
     "gonzales-pe": "3.0.0-31"
   },
   "peerDependencies": {
