@@ -1,69 +1,58 @@
 var path = require('path');
 var assert = require('assert');
-var fileImporter = require('../index');
+var AST = require('../lib/importer');
 
-function parse(file, handler) {
-  fileImporter.parse({
-    includePaths: [path.resolve(__dirname, 'lib/base')],
-    cwd: path.resolve(__dirname, 'lib'),
-    file: file
-  }, handler);
-}
+describe('@import paths', function() {
+  var resultSync, resultAsync;
+  var sync, async;
 
-function parseFile(file, handler) {
-  new fileImporter({
-    includePaths: [path.resolve(__dirname, 'lib/base')],
-    cwd: path.resolve(__dirname, 'lib'),
-    file: file
-  }).render(handler);
-}
+  before(function(done) {
+    resultSync = AST.compileSync({
+      file: './style/paths/index.scss',
+      includePaths: ['./stylelib/'],
+      cwd: __dirname
+    });
 
-describe('@import path', function() {
-  it ('includes locally-pathed file dependencies.', function(done) {
-    parse('paths/index', function(err, data) {
-      // @import 'path/a'
-      assert.contain(data, '.index');
-      assert.contain(data, '.path_a');
+    AST.compile({
+      file: './style/paths/index.scss',
+      includePaths: ['./stylelib/'],
+      cwd: __dirname
+    }, function(err, result) {
+      resultAsync = result;
+      sync = resultSync.ast.toString();
+      async = resultAsync.ast.toString();
       done();
     });
-  });
+  })
 
-  it ('resolves deep file dependencies, each import relative to the current file.', function(done) {
-    parse('paths/index', function(err, data) {
-      // @import 'path/a' => @import 'path/b'
-      assert.contain(data, '.path_path_b');
-      done();
-    });
-  });
+  it ('includes locally-pathed file dependencies.', function() {
+    // from index.scss => path/a
+    assert.contain(sync, '.index');
+    assert.contain(sync, '.path_a');
+    assert.contain(async, '.index');
+    assert.contain(async, '.path_a');
+  })
 
-  it ('resolves deep file dependencies with path backtraces.', function(done) {
-    parse('paths/index', function(err, data) {
-      // @import 'path/a' => @import 'path/b' => @import '../../c'
-      assert.contain(data, '.c');
-      done();
-    });
-  });
+  it ('resolves deeply-nested relative file dependencies.', function() {
+    // from index.scss => path/a => path/b
+    assert.contain(sync, '.path_path_b');
+    assert.contain(async, '.path_path_b');
+  })
 
-  it ('resolves files available via includePaths.', function(done) {
-    parse('paths/index', function(err, data) {
-      // @import 'common/d'
-      assert.contain(data, '.common_d');
-      done();
-    });
-  });
+  it ('resolves deep file dependencies with path backtraces.', function() {
+    // from index.scss => path/a => path/b => ../../c
+    assert.contain(sync, '.c');
+    assert.contain(async, '.c');
+  })
 
-  it ('resolves a file reference into an absolute file path.', function(done) {
-    parseFile('paths/index.scss', function(err, file) {
-      assert.equal(file.filepath, path.join(__dirname, 'lib/paths/index.scss'));
-      done();
-    });
-  });
+  it ('resolves files available via includePaths.', function() {
+    // from index.scss => stylelib/base/main
+    assert.contain(sync, '.base_main');
+    assert.contain(async, '.base_main');
+  })
 
-  it ('resolves a directory reference into an absolute file path.', function(done) {
-    parseFile('paths/path/path', function(err, file) {
-      assert.equal(file.filepath, path.join(__dirname, 'lib/paths/path/path'));
-      done();
-    });
-  });
-
-});
+  it ('resolves relative import references into absolute file paths.', function() {
+    assert.equal(resultSync.file, path.join(__dirname, 'style/paths/index.scss'));
+    assert.equal(resultAsync.file, path.join(__dirname, 'style/paths/index.scss'));
+  })
+})

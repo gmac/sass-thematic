@@ -15,15 +15,30 @@ assert.doesNotContain = function(a, b) {
   }
 };
 
+assert.match = function(val, rx) {
+  if (!rx.test(val)) {
+    assert.fail(val, rx, 'expected to match');
+  }
+};
+
+assert.doesNotMatch = function(val, rx) {
+  if (rx.test(val)) {
+    assert.fail(val, rx, 'expected not to match');
+  }
+};
+
 mocha.reporter('dot');
-mocha.addFile('test/ast');
-mocha.addFile('test/reduce-basic');
-mocha.addFile('test/reduce-interpolation');
-mocha.addFile('test/reduce-mixin');
-mocha.addFile('test/reduce-extend');
-mocha.addFile('test/reduce-placeholder');
-mocha.addFile('test/reduce-directive');
-mocha.addFile('test/render');
+mocha.addFile('test/import-statements');
+mocha.addFile('test/import-resolutions');
+mocha.addFile('test/import-paths');
+// mocha.addFile('test/ast');
+// mocha.addFile('test/reduce-basic');
+// mocha.addFile('test/reduce-interpolation');
+// mocha.addFile('test/reduce-mixin');
+// mocha.addFile('test/reduce-extend');
+// mocha.addFile('test/reduce-placeholder');
+// mocha.addFile('test/reduce-directive');
+// mocha.addFile('test/render');
 
 mocha.run(function(failures) {
   process.on('exit', function() {

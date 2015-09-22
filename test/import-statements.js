@@ -1,58 +1,69 @@
 var path = require('path');
 var assert = require('assert');
-var fileImporter = require('../index');
+var AST = require('../lib/importer');
 
-function parse(file, handler) {
-  return fileImporter.parse({
-    cwd: path.resolve(__dirname, 'lib'),
-    file: file
-  }, handler);
-}
+describe('@import statements', function() {
+  var resultSync, resultAsync;
+  var sync, async;
 
-describe('@import statement', function() {
-  it ('includes a peer file dependency.', function(done) {
-    parse('imports/index', function(err, data) {
-      // @import 'sibling-a';
-      assert.contain(data, '.index');
-      assert.contain(data, '.sibling-a');
+  before(function(done) {
+    resultSync = AST.compileSync({
+      file: './style/imports/index.scss',
+      cwd: __dirname
+    });
+
+    AST.compile({
+      file: './style/imports/index.scss',
+      cwd: __dirname
+    }, function(err, result) {
+      resultAsync = result;
+      sync = resultSync.ast.toString();
+      async = resultAsync.ast.toString();
       done();
     });
-  });
+  })
 
-  it ('includes a prefixed peer dependency.', function(done) {
-    parse('imports/index', function(err, data) {
-      // @import 'sibling-b';
-      assert.contain(data, '.sibling-b');
-      done();
-    });
-  });
+  it ('includes a peer file dependency.', function() {
+    // from index.scss => sibling-a.scss
+    assert.contain(sync, '.index');
+    assert.contain(sync, '.sibling-a');
+    assert.contain(async, '.index');
+    assert.contain(async, '.sibling-a');
+  })
 
-  it ('includes deeply-nested peer dependencies.', function(done) {
-    parse('imports/index', function(err, data) {
-      // @import 'sibling-c'; => @import 'sibling-d';
-      assert.contain(data, '.sibling-c');
-      assert.contain(data, '.sibling-d');
-      done();
-    });
-  });
+  it ('includes an underscored partial dependency.', function() {
+    // from index.scss => _sibling-b.scss
+    assert.contain(sync, '.sibling-b');
+    assert.contain(async, '.sibling-b');
+  })
 
-  it ('includes group dependencies.', function(done) {
-    parse('imports/index', function(err, data) {
-      // @import 'group';
-      assert.contain(data, '.group_a');
-      assert.contain(data, '.group_b');
-      done();
-    });
-  });
+  it ('includes deeply-nested peer dependencies.', function() {
+    // from index.scss => sibling-c.scss => sibling-d.scss
+    assert.contain(sync, '.sibling-c');
+    assert.contain(sync, '.sibling-d');
+    assert.contain(async, '.sibling-c');
+    assert.contain(async, '.sibling-d');
+  })
 
-  it ('removes original @import statement during resolution.', function(done) {
-    parse('imports/index', function(err, data) {
-      assert.doesNotContain(data, '@import');
-      done();
-    });
-  });
+  it ('removes original @import statement during resolution.', function() {
+    assert.doesNotContain(sync, '@import');
+    assert.doesNotContain(async, '@import');
+  })
 
-  it ('emits a reference to each imported file.', function(done) {
+  it ('allows the import of blank files.', function() {
+    var result = AST.compileSync({file: './style/imports/blank.scss', cwd: __dirname});
+    assert.match(result.ast.toString(), /^\s*$/);
+  })
+
+  it ('ignores CSS import statements.', function() {
+    var result = AST.compileSync({file: './style/imports/css-imports.scss', cwd: __dirname});
+    assert.doesNotContain(result.ast.toString(), "@import 'blankfile';");
+    assert.contain(result.ast.toString(), "@import 'test.css';");
+    assert.contain(result.ast.toString(), "@import 'http://test';");
+    assert.contain(result.ast.toString(), "@import url(test);");
+  })
+
+  it.skip ('emits a reference to each imported file.', function(done) {
     var files = [];
     parse('imports/index')
       .on('file', function(filename) {
