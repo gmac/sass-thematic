@@ -1,6 +1,6 @@
 var path = require('path');
 var assert = require('assert');
-var AST = require('../lib/importer');
+var AST = require('../lib/ast');
 
 describe('file resolution', function() {
   it ('resolves a requested file from a base name.', function() {
@@ -43,19 +43,26 @@ describe('file resolution', function() {
     assert.contain(file.ast.toString(), '.prefix');
   })
 
-  it.skip ('errors upon encountering recursive imports.', function() {
+  it ('errors upon unresolvable sync imports.', function() {
+    assert.throws(function() {
+      AST.compileSync({file: 'style/resolution/error.scss', cwd: __dirname});
+    }, /could not be resolved/)
+  })
+
+  it ('errors upon unresolvable missing async imports.', function(done) {
+    AST.compile({file: 'style/resolution/error.scss', cwd: __dirname})
+      .on('end', function() {
+        assert.fail();
+        done();
+      })
+      .on('error', function(err) {
+        assert.match(err.message, /could not be resolved/)
+        done();
+      })
+  })
+
+  it.skip ('errors upon encountering recursive import references.', function() {
     var result = AST.compileSync({file: 'style/resolution/recursive-a', cwd: __dirname})
     console.log(result.ast.toString());
   })
-
-  it.skip ('resolves contents of a provided data string.', function(done) {
-    fileImporter.parse({
-      cwd: path.resolve(__dirname, 'lib'),
-      data: '@import "resolution/group";'
-    }, function(err, data) {
-      assert.contain(data, '.group_a');
-      assert.contain(data, '.group_b');
-      done();
-    });
-  });
-});
+})

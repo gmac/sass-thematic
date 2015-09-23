@@ -1,6 +1,6 @@
 var path = require('path');
 var assert = require('assert');
-var AST = require('../lib/importer');
+var AST = require('../lib/ast');
 
 describe('@import statements', function() {
   var resultSync, resultAsync;

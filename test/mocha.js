@@ -28,10 +28,12 @@ assert.doesNotMatch = function(val, rx) {
 };
 
 mocha.reporter('dot');
-mocha.addFile('test/import-statements');
-mocha.addFile('test/import-resolutions');
-mocha.addFile('test/import-paths');
-// mocha.addFile('test/ast');
+mocha.addFile('test/ast-unit');
+mocha.addFile('test/ast-statements');
+mocha.addFile('test/ast-resolutions');
+mocha.addFile('test/ast-paths');
+mocha.addFile('test/ast-data');
+mocha.addFile('test/ast-taxonomy');
 // mocha.addFile('test/reduce-basic');
 // mocha.addFile('test/reduce-interpolation');
 // mocha.addFile('test/reduce-mixin');
