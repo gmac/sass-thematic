@@ -4,53 +4,53 @@ var AST = require('../lib/ast');
 
 describe('file resolution', function() {
   it ('resolves a requested file from a base name.', function() {
-    var file = AST.compileSync({file: 'style/resolution/index', cwd: __dirname});
+    var file = AST.parseSync({file: 'style/resolution/index', cwd: __dirname});
     assert.contain(file.ast.toString(), '.index');
   })
 
   it ('resolves a requested file from a full filename.', function() {
-    var file = AST.compileSync({file: 'style/resolution/index.scss', cwd: __dirname});
+    var file = AST.parseSync({file: 'style/resolution/index.scss', cwd: __dirname});
     assert.contain(file.ast.toString(), '.index');
   })
 
   it ('resolves a requested file with a relative path.', function() {
-    var file = AST.compileSync({file: './style/resolution/index.scss', cwd: __dirname});
+    var file = AST.parseSync({file: './style/resolution/index.scss', cwd: __dirname});
     assert.contain(file.ast.toString(), '.index');
   })
 
   it ('resolves a requested file with an absolute path.', function() {
-    var file = AST.compileSync({file: path.join(__dirname, 'style/resolution/index.scss'), cwd: __dirname});
+    var file = AST.parseSync({file: path.join(__dirname, 'style/resolution/index.scss'), cwd: __dirname});
     assert.contain(file.ast.toString(), '.index');
   })
 
   it ('resolves a requested file partial without underscore prefix.', function() {
-    var file = AST.compileSync({file: 'style/resolution/prefix', cwd: __dirname});
+    var file = AST.parseSync({file: 'style/resolution/prefix', cwd: __dirname});
     assert.contain(file.ast.toString(), '.prefix');
   })
 
   it ('resolves a requested file partial with underscore prefix.', function() {
-    var file = AST.compileSync({file: 'style/resolution/_prefix', cwd: __dirname});
+    var file = AST.parseSync({file: 'style/resolution/_prefix', cwd: __dirname});
     assert.contain(file.ast.toString(), '.prefix');
   })
 
   it ('resolves a requested file partial without underscore prefix, but with file extension.', function() {
-    var file = AST.compileSync({file: 'style/resolution/prefix.scss', cwd: __dirname});
+    var file = AST.parseSync({file: 'style/resolution/prefix.scss', cwd: __dirname});
     assert.contain(file.ast.toString(), '.prefix');
   })
 
   it ('resolves a requested file partial with underscore prefix and file extension.', function() {
-    var file = AST.compileSync({file: 'style/resolution/_prefix.scss', cwd: __dirname});
+    var file = AST.parseSync({file: 'style/resolution/_prefix.scss', cwd: __dirname});
     assert.contain(file.ast.toString(), '.prefix');
   })
 
   it ('errors upon unresolvable sync imports.', function() {
     assert.throws(function() {
-      AST.compileSync({file: 'style/resolution/error.scss', cwd: __dirname});
+      AST.parseSync({file: 'style/resolution/error.scss', cwd: __dirname});
     }, /could not be resolved/)
   })
 
   it ('errors upon unresolvable missing async imports.', function(done) {
-    AST.compile({file: 'style/resolution/error.scss', cwd: __dirname})
+    AST.parse({file: 'style/resolution/error.scss', cwd: __dirname})
       .on('end', function() {
         assert.fail();
         done();
@@ -61,8 +61,21 @@ describe('file resolution', function() {
       })
   })
 
-  it.skip ('errors upon encountering recursive import references.', function() {
-    var result = AST.compileSync({file: 'style/resolution/recursive-a', cwd: __dirname})
-    console.log(result.ast.toString());
+  it ('errors upon encountering recursive sync imports.', function() {
+    assert.throws(function() {
+      AST.parseSync({file: 'style/resolution/recursive-a', cwd: __dirname})
+    }, /recursive file access/)
+  })
+
+  it ('errors upon encountering recursive async imports.', function(done) {
+    AST.parse({file: 'style/resolution/recursive-a', cwd: __dirname})
+      .on('end', function() {
+        assert.fail();
+        done();
+      })
+      .on('error', function(err) {
+        assert.match(err.message, /recursive file access/)
+        done();
+      })
   })
 })

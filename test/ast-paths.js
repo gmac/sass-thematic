@@ -7,13 +7,13 @@ describe('@import paths', function() {
   var sync, async;
 
   before(function(done) {
-    resultSync = AST.compileSync({
+    resultSync = AST.parseSync({
       file: './style/paths/index.scss',
       includePaths: ['./stylelib/'],
       cwd: __dirname
     });
 
-    AST.compile({
+    AST.parse({
       file: './style/paths/index.scss',
       includePaths: ['./stylelib/'],
       cwd: __dirname

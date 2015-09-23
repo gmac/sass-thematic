@@ -13,13 +13,13 @@ describe('Sass Abstract Syntax Tree', function() {
   var importsSync, importsAsync;
 
   before(function(done) {
-    sync = AST.compileSync({
+    sync = AST.parseSync({
       file: './style/taxonomy/main.scss',
       includePaths: ['./stylelib/'],
       cwd: __dirname
     }).ast
 
-    AST.compile({
+    AST.parse({
       file: './style/taxonomy/main.scss',
       includePaths: ['./stylelib/'],
       cwd: __dirname

@@ -7,12 +7,12 @@ describe('@import statements', function() {
   var sync, async;
 
   before(function(done) {
-    resultSync = AST.compileSync({
+    resultSync = AST.parseSync({
       file: './style/imports/index.scss',
       cwd: __dirname
     });
 
-    AST.compile({
+    AST.parse({
       file: './style/imports/index.scss',
       cwd: __dirname
     }, function(err, result) {
@@ -51,12 +51,12 @@ describe('@import statements', function() {
   })
 
   it ('allows the import of blank files.', function() {
-    var result = AST.compileSync({file: './style/imports/blank.scss', cwd: __dirname});
+    var result = AST.parseSync({file: './style/imports/blank.scss', cwd: __dirname});
     assert.match(result.ast.toString(), /^\s*$/);
   })
 
   it ('ignores CSS import statements.', function() {
-    var result = AST.compileSync({file: './style/imports/css-imports.scss', cwd: __dirname});
+    var result = AST.parseSync({file: './style/imports/css-imports.scss', cwd: __dirname});
     assert.doesNotContain(result.ast.toString(), "@import 'blankfile';");
     assert.contain(result.ast.toString(), "@import 'test.css';");
     assert.contain(result.ast.toString(), "@import 'http://test';");

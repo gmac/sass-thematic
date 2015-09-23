@@ -13,8 +13,8 @@ describe('data option', function() {
     };
 
     before(function(done) {
-      AST.compile(OPTIONS, function(err, result) {
-        resultSync = AST.compileSync(OPTIONS);
+      AST.parse(OPTIONS, function(err, result) {
+        resultSync = AST.parseSync(OPTIONS);
         resultAsync = result;
         sync = resultSync.ast;
         async = resultAsync.ast;
@@ -54,7 +54,7 @@ describe('data option', function() {
 
     it ('errors upon unresolvable virtual import', function() {
       assert.throws(function() {
-        AST.compileSync({data: '@import "imports/sibling-a";', cwd: __dirname});
+        AST.parseSync({data: '@import "imports/sibling-a";', cwd: __dirname});
       }, /could not be resolved/)
     })
   })
@@ -67,8 +67,8 @@ describe('data option', function() {
     };
 
     before(function(done) {
-      AST.compile(OPTIONS, function(err, result) {
-        resultSync = AST.compileSync(OPTIONS);
+      AST.parse(OPTIONS, function(err, result) {
+        resultSync = AST.parseSync(OPTIONS);
         resultAsync = result;
         sync = resultSync.ast;
         async = resultAsync.ast;
@@ -82,7 +82,7 @@ describe('data option', function() {
     })
 
     it ('resolves contents of a provided data string with full-qualified virtual filepath.', function() {
-      var fullUri = AST.compileSync({
+      var fullUri = AST.parseSync({
         file: './style/imports/dummy.scss',
         data: OPTIONS.data,
         cwd: OPTIONS.cwd
