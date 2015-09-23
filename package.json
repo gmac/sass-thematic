@@ -1,6 +1,6 @@
 {
   "name": "sass-thematic",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "description": "A framework for generating dynamic theme stylesheets from Sass.",
   "keywords": [
     "sass",
@@ -23,10 +23,9 @@
     "mocha": "^2.2.5"
   },
   "dependencies": {
-    "file-importer": "^1.0.0",
     "gonzales-pe": "3.0.0-31"
   },
   "peerDependencies": {
-    "node-sass": ">=2.1.1"
+    "node-sass": "^3.3.0"
   }
 }

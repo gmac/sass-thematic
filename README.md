@@ -3,7 +3,7 @@
 **A framework for generating dynamic theme stylesheets from Sass.**
 
 * [How it works](#how-it-works)
-* [Installation & API](#install)
+* [Installation, Upgrade, and API](#install)
 * [Full API options](#full-api-options)
 * [Gulp integration](#gulp-pipe)
 * [Credits](#credit)
@@ -169,32 +169,46 @@ Install the NPM package:
 npm install sass-thematic --save-dev
 ```
 
+## Upgrading to 1.0.0
+
+While the v1.x framework has the same API as the v0.x series, internal operations of the tool have changed significantly, thus meriting the major version bump. Potentially breaking changes:
+
+ - Dropped support for directory imports. Importing follows official [Sass import docs](http://sass-lang.com/documentation/file.SASS_REFERENCE.html#import).
+ - Sass version to v3.3 for rendering methods. Dropped support for Sass v2.x.
+
 ## API
 
-SassThematic provides the following API. All methods take roughly the same options, which are fully [outlined below](#full-api-options).
+SassThematic provides the following API. All methods take roughly the same options, which are fully [outlined below](#full-api-options). As of v1.x, all methods have sync and async implementations.
 
 ### sassThematic.parseAST( options, callback )
+### sassThematic.parseASTSync( options )
 
 Parses and returns a raw abstract syntax tree of your deeply-nested Sass source. The returned object is a [gonzales-pe](https://github.com/tonyganch/gonzales-pe) node tree with all `@import` statements replaced by the imported stylesheet nodes. Use this complete source tree to make your own modifications.
 
 ```javascript
 var sassThematic = require('sass-thematic');
 
+// Async
 sassThematic.parseAST({
   file: './styles/main.scss',
   includePaths: ['./lib/']
 }, function(err, ast) {
    console.log(ast);
 });
+
+// Sync
+var ast = sassThematic.parseASTSync({ ...options... });
 ```
 
 ### sassThematic.parseThemeAST( options, callback )
+### sassThematic.parseThemeASTSync( options )
 
 Parses, prunes, and returns an abstract syntax tree of just your Sass that implements theme variables. A `varsFile` option is required to identify relevant theme variables. This variables file should include *nothing* but variable definitions. The returned object is a [gonzales-pe](https://github.com/tonyganch/gonzales-pe) node tree.
 
 ```javascript
 var sassThematic = require('sass-thematic');
 
+// Async
 sassThematic.parseThemeAST({
   file: './styles/main.scss',
   varsFile: './styles/_theme.scss',
@@ -202,15 +216,20 @@ sassThematic.parseThemeAST({
 }, function(err, ast) {
    console.log(ast);
 });
+
+// Sync
+var ast = sassThematic.parseThemeASTSync({ ...options... });
 ```
 
 ### sassThematic.parseThemeSass( options, callback )
+### sassThematic.parseThemeSassSync( options )
 
 Parses, prunes, and returns a rendered Sass string of rules that implement your theme variables. A `varsFile` option is required to identify relevant theme variables. The returned string is raw Sass with all theme variable imports removed. You may prepend new theme variable definitions onto this Sass string and run it through the Sass compiler.
 
 ```javascript
 var sassThematic = require('sass-thematic');
 
+// Async
 sassThematic.parseThemeSass({
   file: './styles/main.scss',
   varsFile: './styles/_theme.scss',
@@ -218,15 +237,20 @@ sassThematic.parseThemeSass({
 }, function(err, sassString) {
    console.log(sassString);
 });
+
+// Sync
+var sassString = sassThematic.parseThemeSassSync({ ...options... });
 ```
 
 ### sassThematic.renderThemeCSS( options, callback )
+### sassThematic.renderThemeCSSSync( options )
 
 Parses, prunes, compiles, and returns a rendered CSS string of selectors that implement your theme variables. A `varsFile` option is required to identify relevant theme variables. A `themeFile` or `themeData` option is required to provide variables used to render the CSS.
 
 ```javascript
 var sassThematic = require('sass-thematic');
 
+// Async
 sassThematic.renderThemeCSS({
   file: './styles/main.scss',
   varsFile: './styles/_theme.scss',
@@ -235,9 +259,13 @@ sassThematic.renderThemeCSS({
 }, function(err, cssString) {
    console.log(cssString);
 });
+
+// Sync
+var cssString = sassThematic.renderThemeCSSSync({ ...options... });
 ```
 
 ### sassThematic.renderThemeTemplate( options, callback )
+### sassThematic.renderThemeTemplateSync( options )
 
 Parses, prunes, compiles, and returns a rendered template string of flat CSS rules that implement your theme variables. A `varsFile` option is required to identify relevant theme variables. The returned string is flat CSS with interpolation fields (ie: `<%= var %>`) wrapping theme variables.
 
@@ -246,6 +274,7 @@ This method requires the `node-sass` library installed as a peer dependency. Als
 ```javascript
 var sassThematic = require('sass-thematic');
 
+// Async
 sassThematic.renderThemeTemplate({
   file: './styles/main.scss',
   varsFile: './styles/_theme.scss',
@@ -255,6 +284,9 @@ sassThematic.renderThemeTemplate({
 }, function(err, templateString) {
    console.log(templateString);
 });
+
+// Sync
+var templateString = sassThematic.renderThemeTemplateSync({ ...options... });
 ```
 
 ## Full API Options
@@ -288,14 +320,6 @@ sassThematic.renderThemeTemplate({
 * **`templateSnakeCase`**: Boolean. Set as `true` to transform all template variable names to `snake_case` (lowercase with underscores).
 
 * **`outputStyle`**: For rendering methods, this option is passed through to the Sass compiler to define output format. See [node-sass](https://www.npmjs.com/package/node-sass) docs for possible values.
-
-
-## Sass dependency
-
-You may select your own `node-sass` version to install as a peer dependency; SassThematic has been designed to work with versions 2.x and 3.x.
-
-The actual `node-sass` compiler is only used for rendering theme CSS and templates. All AST assembly and tree parsing is performed by other tools.
-
 
 ## Pruning
 

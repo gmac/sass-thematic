@@ -106,7 +106,7 @@ describe('data option', function() {
       var importSync = sync.first('stylesheet');
       var importAsync = async.first('stylesheet');
       var uri = 'sibling-a';
-      var file = path.resolve(__dirname, 'style/imports/sibling-a.scss');
+      var file = path.resolve(__dirname, './style/imports/sibling-a.scss');
 
       assert.equal(importSync.uri, uri);
       assert.equal(importSync.file, file);
@@ -119,6 +119,50 @@ describe('data option', function() {
   })
 
   describe('with includePaths', function() {
-    it.skip ('')
+    var OPTIONS = {
+      data: '@import "base/main";',
+      includePaths: ['./stylelib/'],
+      cwd: __dirname
+    };
+
+    before(function(done) {
+      AST.parse(OPTIONS, function(err, result) {
+        resultSync = AST.parseSync(OPTIONS);
+        resultAsync = result;
+        sync = resultSync.ast;
+        async = resultAsync.ast;
+        done();
+      })
+    })
+
+    it ('resolves contents of a provided data string using includePaths.', function() {
+      assert.contain(sync.toString(), '.base_main');
+      assert.contain(async.toString(), '.base_main');
+    })
+
+    it ('configures meta data for the root file.', function() {
+      assert.equal(sync.uri, __dirname);
+      assert.equal(sync.file, __dirname);
+      assert.equal(sync.importer, null);
+
+      assert.equal(async.uri, __dirname);
+      assert.equal(async.file, __dirname);
+      assert.equal(sync.importer, null);
+    })
+
+    it ('configures meta data for imports.', function() {
+      var importSync = sync.first('stylesheet');
+      var importAsync = async.first('stylesheet');
+      var uri = 'base/main';
+      var file = path.resolve(__dirname, 'stylelib', uri + '.scss');
+
+      assert.equal(importSync.uri, uri);
+      assert.equal(importSync.file, file);
+      assert.equal(importSync.importer.toString(), OPTIONS.data);
+
+      assert.equal(importAsync.uri, uri);
+      assert.equal(importAsync.file, file);
+      assert.equal(importAsync.importer.toString(), OPTIONS.data);
+    })
   })
 })
