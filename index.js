@@ -24,8 +24,8 @@ module.exports = {
   },
 
   parseThemeASTSync: function(opts) {
-    var ast = sassAST.parseSync(opts).ast;
-    var theme = new SassThematic(ast, opts).prune();
+    var result = sassAST.parseSync(opts);
+    var theme = new SassThematic(result.ast, opts).prune();
     return theme.ast;
   },
 
