@@ -86,7 +86,7 @@ function(err, sassString) {
 
 ### 2. Parse
 
-Next, SassThematic reconstitutes our main Sass file's deeply-nested source tree of `@import` statements using [file-importer](https://github.com/gmac/file-importer), and then parses that flattened source into a complete abstract syntax tree (AST) using the fabulous [gonzales-pe](https://github.com/tonyganch/gonzales-pe) lexer:
+Next, SassThematic reconstitutes our main Sass file's deeply-nested source tree of `@import` statements, and then parses that flattened source into a complete abstract syntax tree (AST) using the fabulous [gonzales-pe](https://github.com/tonyganch/gonzales-pe) lexer:
 
 ```css
 $theme-color: green;
@@ -169,7 +169,7 @@ Install the NPM package:
 npm install sass-thematic --save-dev
 ```
 
-## Upgrading to 1.0.0
+## Upgrading to v1.x
 
 While the v1.x framework has the same API as the v0.x series, internal operations of the tool have changed significantly, thus meriting the major version bump. Potentially breaking changes:
 
@@ -180,8 +180,9 @@ While the v1.x framework has the same API as the v0.x series, internal operation
 
 SassThematic provides the following API. All methods take roughly the same options, which are fully [outlined below](#full-api-options). As of v1.x, all methods have sync and async implementations.
 
-### sassThematic.parseAST( options, callback )
-### sassThematic.parseASTSync( options )
+### parseAST
+- **sassThematic.parseAST( options, callback )**
+- **sassThematic.parseASTSync( options )**
 
 Parses and returns a raw abstract syntax tree of your deeply-nested Sass source. The returned object is a [gonzales-pe](https://github.com/tonyganch/gonzales-pe) node tree with all `@import` statements replaced by the imported stylesheet nodes. Use this complete source tree to make your own modifications.
 
@@ -200,8 +201,9 @@ sassThematic.parseAST({
 var ast = sassThematic.parseASTSync({ ...options... });
 ```
 
-### sassThematic.parseThemeAST( options, callback )
-### sassThematic.parseThemeASTSync( options )
+### parseThemeAST
+- **sassThematic.parseThemeAST( options, callback )**
+- **sassThematic.parseThemeASTSync( options )**
 
 Parses, prunes, and returns an abstract syntax tree of just your Sass that implements theme variables. A `varsFile` option is required to identify relevant theme variables. This variables file should include *nothing* but variable definitions. The returned object is a [gonzales-pe](https://github.com/tonyganch/gonzales-pe) node tree.
 
@@ -221,8 +223,9 @@ sassThematic.parseThemeAST({
 var ast = sassThematic.parseThemeASTSync({ ...options... });
 ```
 
-### sassThematic.parseThemeSass( options, callback )
-### sassThematic.parseThemeSassSync( options )
+### parseThemeSass
+- **sassThematic.parseThemeSass( options, callback )**
+- **sassThematic.parseThemeSassSync( options )**
 
 Parses, prunes, and returns a rendered Sass string of rules that implement your theme variables. A `varsFile` option is required to identify relevant theme variables. The returned string is raw Sass with all theme variable imports removed. You may prepend new theme variable definitions onto this Sass string and run it through the Sass compiler.
 
@@ -242,8 +245,9 @@ sassThematic.parseThemeSass({
 var sassString = sassThematic.parseThemeSassSync({ ...options... });
 ```
 
-### sassThematic.renderThemeCSS( options, callback )
-### sassThematic.renderThemeCSSSync( options )
+### renderThemeCSS
+- **sassThematic.renderThemeCSS( options, callback )**
+- **sassThematic.renderThemeCSSSync( options )**
 
 Parses, prunes, compiles, and returns a rendered CSS string of selectors that implement your theme variables. A `varsFile` option is required to identify relevant theme variables. A `themeFile` or `themeData` option is required to provide variables used to render the CSS.
 
@@ -264,8 +268,9 @@ sassThematic.renderThemeCSS({
 var cssString = sassThematic.renderThemeCSSSync({ ...options... });
 ```
 
-### sassThematic.renderThemeTemplate( options, callback )
-### sassThematic.renderThemeTemplateSync( options )
+### renderThemeTemplate
+- **sassThematic.renderThemeTemplate( options, callback )**
+- **sassThematic.renderThemeTemplateSync( options )**
 
 Parses, prunes, compiles, and returns a rendered template string of flat CSS rules that implement your theme variables. A `varsFile` option is required to identify relevant theme variables. The returned string is flat CSS with interpolation fields (ie: `<%= var %>`) wrapping theme variables.
 
