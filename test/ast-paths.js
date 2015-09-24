@@ -7,18 +7,15 @@ describe('@import paths', function() {
   var sync, async;
 
   before(function(done) {
-    resultSync = AST.parseSync({
+    var opts = {
       file: './style/paths/index.scss',
       includePaths: ['./stylelib/'],
       cwd: __dirname
-    });
+    };
 
-    AST.parse({
-      file: './style/paths/index.scss',
-      includePaths: ['./stylelib/'],
-      cwd: __dirname
-    }, function(err, result) {
+    AST.parse(opts, function(err, result) {
       resultAsync = result;
+      resultSync = AST.parseSync(opts);
       sync = resultSync.ast.toString();
       async = resultAsync.ast.toString();
       done();

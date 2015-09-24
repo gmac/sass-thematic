@@ -7,16 +7,14 @@ describe('@import statements', function() {
   var sync, async;
 
   before(function(done) {
-    resultSync = AST.parseSync({
+    var opts = {
       file: './style/imports/index.scss',
       cwd: __dirname
-    });
+    };
 
-    AST.parse({
-      file: './style/imports/index.scss',
-      cwd: __dirname
-    }, function(err, result) {
+    AST.parse(opts, function(err, result) {
       resultAsync = result;
+      resultSync = AST.parseSync(opts);
       sync = resultSync.ast.toString();
       async = resultAsync.ast.toString();
       done();

@@ -8,7 +8,7 @@
     "override"
   ],
   "main": "index.js",
-  "loader": "index-webpack.js",
+  "loader": "lib/webpack-loader.js",
   "scripts": {
     "test": "node ./test/mocha.js"
   },
@@ -23,7 +23,9 @@
     "mocha": "^2.2.5"
   },
   "dependencies": {
-    "gonzales-pe": "3.0.0-31"
+    "async": "^1.4.2",
+    "gonzales-pe": "3.0.0-31",
+    "loader-utils": "^0.2.11"
   },
   "peerDependencies": {
     "node-sass": "^3.3.0"

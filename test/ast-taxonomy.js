@@ -9,24 +9,21 @@ function stylesheets(ast) {
 }
 
 describe('Sass Abstract Syntax Tree', function() {
-  var sync, async;
+  var resultSync, resultAsync;
   var importsSync, importsAsync;
 
   before(function(done) {
-    sync = AST.parseSync({
+    var opts = {
       file: './style/taxonomy/main.scss',
       includePaths: ['./stylelib/'],
       cwd: __dirname
-    }).ast
+    };
 
-    AST.parse({
-      file: './style/taxonomy/main.scss',
-      includePaths: ['./stylelib/'],
-      cwd: __dirname
-    }, function(err, result) {
-      async = result.ast;
-      importsSync = stylesheets(sync);
-      importsAsync = stylesheets(async);
+    AST.parse(opts, function(err, result) {
+      resultAsync = result;
+      resultSync = AST.parseSync(opts);
+      importsAsync = stylesheets(resultSync.ast);
+      importsSync = stylesheets(resultSync.ast);
       done();
     })
   })
@@ -36,8 +33,20 @@ describe('Sass Abstract Syntax Tree', function() {
     assert.equal(importsAsync.length, 4);
   })
 
+  it ('returns an array of all included files.', function() {
+    assert.equal(resultSync.includedFiles.length, 5);
+    assert.equal(resultAsync.includedFiles.length, 5);
+
+    var includes = resultSync.includedFiles;
+    assert(includes.indexOf(path.resolve(__dirname, './style/taxonomy/a.scss')) >= 0)
+    assert(includes.indexOf(path.resolve(__dirname, './style/taxonomy/_b.scss')) >= 0)
+    assert(includes.indexOf(path.resolve(__dirname, './style/taxonomy/path/c.scss')) >= 0)
+    assert(includes.indexOf(path.resolve(__dirname, './style/taxonomy/path/d.scss')) >= 0)
+    assert(includes.indexOf(path.resolve(__dirname, './stylelib/base/main.scss')) >= 0)
+  })
+
   it ('configures meta data for the root stylesheet.', function() {
-    [sync, async].forEach(function(ast) {
+    [resultSync.ast, resultAsync.ast].forEach(function(ast) {
       var file = path.resolve(__dirname, './style/taxonomy/main.scss');
       assert.equal(ast.uri, file);
       assert.equal(ast.file, file);
