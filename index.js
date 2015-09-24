@@ -65,5 +65,11 @@ module.exports = {
   renderThemeTemplateSync: function(opts) {
     var result = sassAST.parseSync(opts);
     return new SassThematic(result.ast, opts).templateSync();
+  },
+
+  // Webpack Plugin
+  SassThematicPlugin: function(opts) {
+    var SassThematicPlugin = require('./lib/webpack-plugin');
+    return new SassThematicPlugin(opts);
   }
 };
