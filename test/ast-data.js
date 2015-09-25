@@ -52,10 +52,17 @@ describe('data option', function() {
       assert.equal(importAsync.importer.toString(), OPTIONS.data);
     })
 
-    it ('errors upon unresolvable virtual import', function() {
+    it ('errors upon unresolvable sync virtual import', function() {
       assert.throws(function() {
         AST.parseSync({data: '@import "imports/sibling-a";', cwd: __dirname});
       }, /could not be resolved/)
+    })
+
+    it ('errors upon unresolvable async virtual import', function(done) {
+      AST.parse({data: '@import "imports/sibling-a";', cwd: __dirname}, function(err, file) {
+        assert.match(err.message, /could not be resolved/);
+        done()
+      })
     })
   })
 

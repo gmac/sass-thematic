@@ -50,15 +50,11 @@ describe('file resolution', function() {
   })
 
   it ('errors upon unresolvable missing async imports.', function(done) {
-    AST.parse({file: 'style/resolution/error.scss', cwd: __dirname})
-      .on('end', function() {
-        assert.fail();
-        done();
-      })
-      .on('error', function(err) {
-        assert.match(err.message, /could not be resolved/)
-        done();
-      })
+    AST.parse({file: 'style/resolution/error.scss', cwd: __dirname}, function(err, result) {
+      assert(err)
+      assert.match(err.message, /could not be resolved/)
+      done()
+    })
   })
 
   it ('errors upon encountering recursive sync imports.', function() {
@@ -68,14 +64,10 @@ describe('file resolution', function() {
   })
 
   it ('errors upon encountering recursive async imports.', function(done) {
-    AST.parse({file: 'style/resolution/recursive-a', cwd: __dirname})
-      .on('end', function() {
-        assert.fail();
-        done();
-      })
-      .on('error', function(err) {
-        assert.match(err.message, /recursive file access/)
-        done();
-      })
+    AST.parse({file: 'style/resolution/recursive-a', cwd: __dirname}, function(err, result) {
+      assert(err)
+      assert.match(err.message, /recursive file access/)
+      done()
+    })
   })
 })

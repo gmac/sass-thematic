@@ -2,7 +2,7 @@ var path = require('path');
 var assert = require('assert');
 var AST = require('../lib/ast');
 
-describe('@import statements', function() {
+describe ('@import statements', function() {
   var resultSync, resultAsync;
   var sync, async;
 

@@ -29,7 +29,7 @@ assert.doesNotMatch = function(val, rx) {
 
 mocha.reporter('dot');
 mocha.addFile('test/ast-unit');
-/*mocha.addFile('test/ast-statements');
+mocha.addFile('test/ast-statements');
 mocha.addFile('test/ast-resolutions');
 mocha.addFile('test/ast-paths');
 mocha.addFile('test/ast-data');
@@ -40,7 +40,7 @@ mocha.addFile('test/reduce-mixin');
 mocha.addFile('test/reduce-extend');
 mocha.addFile('test/reduce-placeholder');
 mocha.addFile('test/reduce-directive');
-mocha.addFile('test/render');*/
+mocha.addFile('test/render');
 
 mocha.run(function(failures) {
   process.on('exit', function() {
