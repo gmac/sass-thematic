@@ -362,8 +362,8 @@ var config = {
           'components/site/auth/index.scss'
         ],
         template: {
-          filename: 'theme2.css',
-          writePath: '/Users/gregmacwilliam/Desktop/',
+          filename: 'theme.css.erb',
+          writePath: '../views/theme',
           templateOpen: '<%= @theme[:',
           templateClose: '] %>',
           templateSnakeCase: true,
@@ -372,7 +372,7 @@ var config = {
           footer: '<%= @theme[:theme_postfix] %>'
         },
         css: {
-          filename: 'theme.css',
+          filename: 'theme.css'
         }
       }]
     })
@@ -380,7 +380,7 @@ var config = {
 }
 ```
 
-1. Add `sass-thematic` as the right-most Sass loader. This should be added **in addition to* a standard Sass loader. The SassThematic loader simply loads changed file sources; you'll still need the standard Sass loader to compile assets.
+1. Add `sass-thematic` as the right-most Sass loader. This should be added **in addition** to a standard Sass loader. The SassThematic loader simply loads changed file sources; you'll still need the standard Sass loader to compile assets.
 
 1. Add a `sassThematic.plugin(...)` call into the `plugins` list. The plugin options detail the build of one or more theme stylesheet files. Plugin options are as follows:
 
