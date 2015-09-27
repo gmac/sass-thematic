@@ -1,11 +1,13 @@
 var assert = require('assert');
-var sassThematic = require('../index');
+var AST = require('../lib/ast');
+var SassThematic = require('../lib/thematic');
+var sassThematicApi = require('../index');
 
 describe('basic reducer', function() {
   var linefeed;
 
   before(function(done) {
-    sassThematic.parseThemeSass({
+    sassThematicApi.parseThemeSass({
       varsFile: 'style/reduce/_vars.scss',
       file: 'style/reduce/basic.scss',
       cwd: __dirname,
@@ -49,4 +51,15 @@ describe('basic reducer', function() {
   it ('keeps rulesets flagged with an "@sass-thematic-keep" singleline comment.', function() {
     assert.equal(linefeed(23, 3), '.keep { // @sass-thematic-keep }');
   });
+
+  it ('performs itempotent pruning, wherein multiple calls will produce the same result.', function() {
+    var opts = {
+      varsFile: 'style/reduce/_vars.scss',
+      file: 'style/reduce/basic.scss',
+      cwd: __dirname
+    };
+    var ast = AST.parseSync(opts).ast;
+    var theme = new SassThematic(ast, opts);
+    assert.equal(theme.prune().toString(), theme.prune().toString());
+  })
 });
