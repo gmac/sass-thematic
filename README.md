@@ -5,6 +5,7 @@
 * [How it works](#how-it-works)
 * [Installation, Upgrade, and API](#install)
 * [Full API options](#full-api-options)
+* [Webpack integration](#webpack-plugin)
 * [Gulp integration](#gulp-pipe)
 * [Credits](#credit)
 
@@ -337,6 +338,61 @@ SassThematic currently supports the following basic implementations:
 
 This tool is a self-acknowledged 90% system that attempts to provide good automation for conventional use cases. Sass is a complex and nuanced language, therefore all of these pruning implementations undoubtedly have holes. For best results, review the [tests specs](https://github.com/gmac/sass-thematic/tree/master/test/style/reduce) to see what capabilities exist, and moderate complexity while implementing theme variables.
 
+## Webpack Plugin
+
+SassThematic provides a Webpack plugin to live-compile theme assets during development. The system uses a hybrid loader/plugin within the Webpack build pipe. Example Webpack config:
+
+```
+var sassThematic = require('sass-thematic');
+
+var config = {
+  module: {
+    loaders: [
+      { test: /\.scss$/, loader: "style!css!sass!sass-thematic") }
+    ]
+  },
+  plugins: [
+    sassThematic.plugin({
+      varsFile: '../styles/shared/_theme.scss',
+      includePaths: ['./styles/shared'],
+      cwd: __dirname,
+      output: [{
+        includeFiles: [
+          'components/site/base/index.scss',
+          'components/site/auth/index.scss'
+        ],
+        template: {
+          filename: 'theme2.css',
+          writePath: '/Users/gregmacwilliam/Desktop/',
+          templateOpen: '<%= @theme[:',
+          templateClose: '] %>',
+          templateSnakeCase: true,
+          outputStyle: 'compressed',
+          banner: '<%= @theme[:theme_prefix] %>',
+          footer: '<%= @theme[:theme_postfix] %>'
+        },
+        css: {
+          filename: 'theme.css',
+        }
+      }]
+    })
+  ]
+}
+```
+
+1. Add `sass-thematic` as the right-most Sass loader. This should be added **in addition to* a standard Sass loader. The SassThematic loader simply loads changed file sources; you'll still need the standard Sass loader to compile assets.
+
+1. Add a `sassThematic.plugin(...)` call into the `plugins` list. The plugin options detail the build of one or more theme stylesheet files. Plugin options are as follows:
+
+ - `varsFile`: required. The file of theme variable definitions.
+ - `themeFile`: optional. The file of theme variables to render into CSS output.
+ - `includePaths`: optional. An array of locations to include in file lookups.
+ - `cwd`: optional. A current working directory reference to resolve relative paths from.
+ - `output`: required. An object (or array of objects) detailing theme files to generate.
+   - `output.includeFiles`: required. An _ordered_ array of Sass files to include in the theme stylesheet.
+   - `output.template`: parameters detailing the render of this output's template. This template file will be published to your standard Webpack output location. Include a `writePath` option to also write the file to a custom output location (useful for writing templates into an app directory).
+   - `output.css`: parameters detailing the render of this output's CSS stylesheet. This css asset will be published to your standard Webpack output location. Include a `writePath` option to also write the file to a custom output location.
+
 ## Gulp Pipe
 
 It's pretty simple to setup a Gulp pipe that hooks multiple Sass entry point files into SassThematic. Use the following as a basic template:
@@ -353,7 +409,7 @@ function sassTheme(opts) {
   return through2.obj(function(file, enc, done) {
       opts.file = file.path;
       opts.data = file.contents.toString('utf-8');
-      
+
       sassThematic.parseThemeSass(opts, function(err, result) {
         output += result;
         done();
