@@ -342,13 +342,13 @@ This tool is a self-acknowledged 90% system that attempts to provide good automa
 
 SassThematic provides a Webpack plugin to live-compile theme assets during development. The system uses a hybrid loader/plugin within the Webpack build pipe. Example Webpack config:
 
-```
+```javascript
 var sassThematic = require('sass-thematic');
 
 var config = {
   module: {
     loaders: [
-      { test: /\.scss$/, loader: "style!css!sass!sass-thematic") }
+      { test: /\.scss$/, loader: "style!css!sass!sass-thematic" }
     ]
   },
   plugins: [
