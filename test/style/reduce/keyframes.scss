@@ -1,0 +1,20 @@
+@import 'junk';
+@import 'vars';
+
+@keyframes anim-junk {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: $junk-size;
+  }
+}
+
+@keyframes anim-keep {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: $keep-size;
+  }
+}

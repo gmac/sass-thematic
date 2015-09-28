@@ -368,7 +368,7 @@ var config = {
           templateClose: '] %>',
           templateSnakeCase: true,
           outputStyle: 'compressed',
-          banner: '<%= @theme[:theme_prefix] %>',
+          header: '<%= @theme[:theme_prefix] %>',
           footer: '<%= @theme[:theme_postfix] %>'
         },
         css: {
