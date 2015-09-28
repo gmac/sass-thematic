@@ -34,9 +34,6 @@ describe('Sass Abstract Syntax Tree', function() {
   })
 
   it ('returns an array of all included files.', function() {
-    assert.equal(resultSync.includedFiles.length, 5);
-    assert.equal(resultAsync.includedFiles.length, 5);
-
     var includes = resultSync.includedFiles;
     assert(includes.indexOf(path.resolve(__dirname, './style/taxonomy/a.scss')) >= 0)
     assert(includes.indexOf(path.resolve(__dirname, './style/taxonomy/_b.scss')) >= 0)

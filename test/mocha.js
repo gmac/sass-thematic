@@ -42,6 +42,7 @@ mocha.addFile('test/reduce-placeholder');
 mocha.addFile('test/reduce-directive');
 mocha.addFile('test/reduce-keyframes');
 mocha.addFile('test/render');
+//mocha.addFile('test/plugin');
 
 mocha.run(function(failures) {
   process.on('exit', function() {
