@@ -52,14 +52,25 @@ describe('basic reducer', function() {
     assert.equal(linefeed(23, 3), '.keep { // @sass-thematic-keep }');
   });
 
-  it ('performs itempotent pruning, wherein multiple calls will produce the same result.', function() {
+  describe('special considerations', function() {
     var opts = {
       varsFile: 'style/reduce/_vars.scss',
       file: 'style/reduce/basic.scss',
       cwd: __dirname
     };
-    var ast = AST.parseSync(opts).ast;
-    var theme = new SassThematic(ast, opts);
-    assert.equal(theme.prune().toString(), theme.prune().toString());
+
+    it ('performs itempotent pruning, wherein multiple calls will produce the same result.', function() {
+      var ast = AST.parseSync(opts).ast;
+      var theme = new SassThematic(ast, opts);
+      assert.equal(theme.prune().toString(), theme.prune().toString());
+    })
+
+    it ('indifferently prunes either node trees or JSON structures.', function() {
+      var node = AST.parseSync(opts).ast;
+      var json = JSON.parse(node.toJson());
+      var themeNode = new SassThematic(node, opts);
+      var themeJson = new SassThematic(json, opts);
+      assert.equal(themeNode.prune().toString(), themeJson.prune().toString());
+    })
   })
 });
