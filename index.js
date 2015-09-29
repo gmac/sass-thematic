@@ -69,7 +69,7 @@ module.exports = {
 
   // Webpack Plugin
 
-  plugin: function(opts) {
+  webpack: function(opts) {
     var SassThematicPlugin = require('./lib/webpack-plugin');
     return new SassThematicPlugin(opts);
   }
