@@ -348,7 +348,7 @@ var sassThematic = require('sass-thematic');
 var config = {
   module: {
     loaders: [
-      { test: /\.scss$/, loader: "style!css!sass?includePaths[]=" + path.resolve('./styles/shared') }
+      { test: /\.scss$/, loader: "style!css!sass?includePaths[]="+path.resolve('./styles/shared') }
     ]
   },
   plugins: [
@@ -389,9 +389,9 @@ The SassThematic plugin operates independently from Webpack's main asset pipelin
 - `includePaths`: optional. An array of locations to include in file import lookups.
 - `cwd`: optional. A current working directory to resolve relative paths from.
 - `output`: required. An object (or array of objects) detailing each theme resource to generate. Each resource may be configured to output a CSS file and a template file.  
-- `output.includeFiles`: required. An _ordered_ array of Sass files to include in this theme output.
-- `output.template`: parameters detailing the render of this output's template. This template file will be published to your standard Webpack output location. Include a `writePath` option to also write the file to a custom output location (useful for writing templates into an app directory).
-- `output.css`: parameters detailing the render of this output's CSS stylesheet. This css asset will be published to your standard Webpack output location. Include a `writePath` option to also write the file to a custom output location.
+- `output[].includeFiles`: required. An _ordered_ array of Sass files to include in this theme output.
+- `output[].template`: parameters detailing the render of this output's template. This template file will be published to your standard Webpack output location. Include a `writePath` option to also write the file to a custom output location (useful for writing templates into an app directory).
+- `output[].css`: parameters detailing the render of this output's CSS stylesheet. This css asset will be published to your standard Webpack output location. Include a `writePath` option to also write the file to a custom output location.
 
 ## Gulp Pipe
 
