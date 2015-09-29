@@ -340,7 +340,7 @@ This tool is a self-acknowledged 90% system that attempts to provide good automa
 
 ## Webpack Plugin
 
-SassThematic provides a Webpack plugin to live-compile theme assets during development. The system uses a hybrid loader/plugin within the Webpack build pipe. Example Webpack config:
+SassThematic provides a Webpack plugin to live-compile theme assets during development. Example Webpack config:
 
 ```javascript
 var sassThematic = require('sass-thematic');
@@ -348,7 +348,7 @@ var sassThematic = require('sass-thematic');
 var config = {
   module: {
     loaders: [
-      { test: /\.scss$/, loader: "style!css!sass!sass-thematic" }
+      { test: /\.scss$/, loader: "style!css!sass?includePaths[]=" + path.resolve('./styles/shared') }
     ]
   },
   plugins: [
@@ -380,18 +380,18 @@ var config = {
 }
 ```
 
-1. Add `sass-thematic` as the right-most Sass loader. This should be added **in addition** to a standard Sass loader. The SassThematic loader simply loads changed file sources; you'll still need the standard Sass loader to compile assets.
+The SassThematic plugin operates independently from Webpack's main asset pipeline, so you WILL still need to include a standard Sass loader to handle asset compilation. SassThematic is configurable to track assets inside or outside of the main Webpack build – SassThematic will expand the Webpack watch to include all required theme files, and will produce incremental builds from its own AST caches. The SassThematic plugin will add all compiled theme assets into the Webpack asset tree (and thus may be served via Webpack dev middleware). 
 
-1. Add a `sassThematic.plugin(...)` call into the `plugins` list. The plugin options detail the build of one or more theme stylesheet files. Plugin options are as follows:
+**Installation:** add a `sassThematic.plugin(...)` call into your Webpack config `plugins` list. The plugin options detail the build of one or more theme stylesheet files. Plugin options are as follows:
 
- - `varsFile`: required. The file of theme variable definitions.
- - `themeFile`: optional. The file of theme variables to render into CSS output.
- - `includePaths`: optional. An array of locations to include in file lookups.
- - `cwd`: optional. A current working directory reference to resolve relative paths from.
- - `output`: required. An object (or array of objects) detailing theme files to generate.
-   - `output.includeFiles`: required. An _ordered_ array of Sass files to include in the theme stylesheet.
-   - `output.template`: parameters detailing the render of this output's template. This template file will be published to your standard Webpack output location. Include a `writePath` option to also write the file to a custom output location (useful for writing templates into an app directory).
-   - `output.css`: parameters detailing the render of this output's CSS stylesheet. This css asset will be published to your standard Webpack output location. Include a `writePath` option to also write the file to a custom output location.
+- `varsFile`: required. The file of theme variable definitions.
+- `themeFile`: optional. The file of theme variables to render into CSS output.
+- `includePaths`: optional. An array of locations to include in file import lookups.
+- `cwd`: optional. A current working directory to resolve relative paths from.
+- `output`: required. An object (or array of objects) detailing each theme resource to generate. Each resource may be configured to output a CSS file and a template file.  
+- `output.includeFiles`: required. An _ordered_ array of Sass files to include in this theme output.
+- `output.template`: parameters detailing the render of this output's template. This template file will be published to your standard Webpack output location. Include a `writePath` option to also write the file to a custom output location (useful for writing templates into an app directory).
+- `output.css`: parameters detailing the render of this output's CSS stylesheet. This css asset will be published to your standard Webpack output location. Include a `writePath` option to also write the file to a custom output location.
 
 ## Gulp Pipe
 
