@@ -13,7 +13,9 @@
 
 We're building a site that gets themed with customizable colors, fonts, sizes, etc. So, we set up a base stylesheet for the site, and then maintain a separate theme stylesheet for custom style overrides.
 
-This works, but makes updates difficult. All changes in the base stylesheet must be mirrored in the theme-specific overrides. Keeping these stylesheets synchronized is tedious and error-prone. It would be great if we could just _automate_ the generation of these theme overrides from the base source...
+![](https://cdn2.vox-cdn.com/thumbor/URBw1hzRV7J438s5EUDF8wNszyg=/0x0:1803x1014/1400x788/filters:format(webp)/cdn0.vox-cdn.com/uploads/chorus_image/image/46706550/themes.0.0.jpg)
+
+This works, but makes updates difficult. All changes in the base stylesheet must be mirrored in the theme-specific overrides. Keeping these stylesheets synchronized is tedious and error-prone. It would be great if we could just _automate_ the generation of these theme overrides from the base source... or, just generate a CSS template that can be rendered by our application with site-specific variables.
 
 This is SassThematic.
 
