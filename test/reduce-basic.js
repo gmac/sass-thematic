@@ -17,33 +17,33 @@ describe('basics', function() {
       return text.split('\n').join(' ').replace(/\s+/g, ' ');
     }
 
-    it ('performs no tree alterations by default.', function() {
+    it ('prunes variable includes and unthemed tree forks by default.', function() {
       var theme = new SassThematic(JSON.parse(ast.toJson()), opts);
-      assert.equal(theme.parse().toString(), ast.toString());
+      var result = theme.parse().toString();
+      assert.equal(normalize(result), '$junk-color: red; $junk-size: 100; // varsfile // ruleset .keep { color: $keep-color; // declaration; }');
     })
 
-    it ('prunes varsfile references.', function() {
+    it ('may disable tree pruning.', function() {
       var theme = new SassThematic(JSON.parse(ast.toJson()), opts);
-      var result = theme.parse({pruneVars: true}).toString();
+      var result = theme.parse({pruneTree: false}).toString();
       assert.equal(normalize(result), '$junk-color: red; $junk-size: 100; // varsfile .junk { color: $junk-color; font-family: serif; } .keep { color: $keep-color; font-family: serif; }');
     })
 
-    it ('prunes unthemed tree forks.', function() {
+    it ('may disable variables omission and tree pruning (effectively resulting in a no-op).', function() {
       var theme = new SassThematic(JSON.parse(ast.toJson()), opts);
-      var result = theme.parse({pruneVars: true, pruneTree: true}).toString();
-      assert.equal(normalize(result), '$junk-color: red; $junk-size: 100; // varsfile // ruleset .keep { color: $keep-color; // declaration; }');
+      assert.equal(theme.parse({pruneVars: false, pruneTree: false}).toString(), ast.toString());
     })
 
     it ('templatizes theme variables.', function() {
       var theme = new SassThematic(JSON.parse(ast.toJson()), opts);
-      var result = theme.parse({pruneVars: true, template: true}).toString();
-      assert.equal(normalize(result), '$junk-color: red; $junk-size: 100; // varsfile .junk { color: $junk-color; font-family: serif; } .keep { color: ____keep-color____; font-family: serif; }');
+      var result = theme.parse({template: true}).toString();
+      assert.equal(normalize(result), '$junk-color: red; $junk-size: 100; // varsfile // ruleset .keep { color: ____keep-color____; // declaration; }');
     })
 
-    it ('performs all pruning and template operations together.', function() {
+    it ('templatizes theme variables throughout an expanded source tree.', function() {
       var theme = new SassThematic(JSON.parse(ast.toJson()), opts);
-      var result = theme.parse({pruneVars: true, pruneTree: true, template: true}).toString();
-      assert.equal(normalize(result), '$junk-color: red; $junk-size: 100; // varsfile // ruleset .keep { color: ____keep-color____; // declaration; }');
+      var result = theme.parse({pruneTree: false, template: true}).toString();
+      assert.equal(normalize(result), '$junk-color: red; $junk-size: 100; // varsfile .junk { color: $junk-color; font-family: serif; } .keep { color: ____keep-color____; font-family: serif; }');
     })
   })
 
@@ -107,7 +107,7 @@ describe('basics', function() {
     it ('performs itempotent pruning, wherein multiple calls will produce the same result.', function() {
       var ast = AST.parseSync(opts).ast;
       var theme = new SassThematic(ast, opts);
-      assert.equal(theme.prune().toString(), theme.prune().toString());
+      assert.equal(theme.parse().toString(), theme.parse().toString());
     })
 
     it ('indifferently prunes either node trees or primitive structures.', function() {
@@ -115,7 +115,7 @@ describe('basics', function() {
       var json = JSON.parse(node.toJson());
       var themeNode = new SassThematic(node, opts);
       var themeJson = new SassThematic(json, opts);
-      assert.equal(themeNode.prune().toString(), themeJson.prune().toString());
+      assert.equal(themeNode.parse().toString(), themeJson.parse().toString());
     })
   })
 })

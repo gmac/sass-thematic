@@ -75,9 +75,9 @@ $other-color: red;
 Now we can run SassThematic with references to our theme variables file, and to our main Sass file. All SassThematic methods operate similar to [node-sass](https://www.npmjs.com/package/node-sass), with an `includePaths` option for resolving imports:
 
 ```javascript
-var sassThematic = require('sass-thematic');
+var thematic = require('sass-thematic');
 
-sassThematic.parseThemeSass({
+thematic.parseThemeSass({
   varsFile: './styles/_vars.scss',
   file: './styles/main.scss',
   includePaths: ['./lib/']
@@ -184,16 +184,16 @@ While the v1.x framework has the same API as the v0.x series, internal operation
 SassThematic provides the following API. All methods take roughly the same options, which are fully [outlined below](#full-api-options). As of v1.x, all methods have sync and async implementations.
 
 ### parseAST
-- **sassThematic.parseAST( options, callback )**
-- **sassThematic.parseASTSync( options )**
+- **thematic.parseAST( options, callback )**
+- **thematic.parseASTSync( options )**
 
 Parses and returns a raw abstract syntax tree of your deeply-nested Sass source. The returned object is a [gonzales-pe](https://github.com/tonyganch/gonzales-pe) node tree with all `@import` statements replaced by the imported stylesheet nodes. Use this complete source tree to make your own modifications.
 
 ```javascript
-var sassThematic = require('sass-thematic');
+var thematic = require('sass-thematic');
 
 // Async
-sassThematic.parseAST({
+thematic.parseAST({
   file: './styles/main.scss',
   includePaths: ['./lib/']
 }, function(err, ast) {
@@ -201,20 +201,20 @@ sassThematic.parseAST({
 });
 
 // Sync
-var ast = sassThematic.parseASTSync({ ...options... });
+var ast = thematic.parseASTSync({ ...options... });
 ```
 
 ### parseThemeAST
-- **sassThematic.parseThemeAST( options, callback )**
-- **sassThematic.parseThemeASTSync( options )**
+- **thematic.parseThemeAST( options, callback )**
+- **thematic.parseThemeASTSync( options )**
 
 Parses, prunes, and returns an abstract syntax tree of just your Sass that implements theme variables. A `varsFile` option is required to identify relevant theme variables. This variables file should include *nothing* but variable definitions. The returned object is a [gonzales-pe](https://github.com/tonyganch/gonzales-pe) node tree.
 
 ```javascript
-var sassThematic = require('sass-thematic');
+var thematic = require('sass-thematic');
 
 // Async
-sassThematic.parseThemeAST({
+thematic.parseThemeAST({
   file: './styles/main.scss',
   varsFile: './styles/_theme.scss',
   includePaths: ['./lib/']
@@ -223,20 +223,20 @@ sassThematic.parseThemeAST({
 });
 
 // Sync
-var ast = sassThematic.parseThemeASTSync({ ...options... });
+var ast = thematic.parseThemeASTSync({ ...options... });
 ```
 
 ### parseThemeSass
-- **sassThematic.parseThemeSass( options, callback )**
-- **sassThematic.parseThemeSassSync( options )**
+- **thematic.parseThemeSass( options, callback )**
+- **thematic.parseThemeSassSync( options )**
 
 Parses, prunes, and returns a rendered Sass string of rules that implement your theme variables. A `varsFile` option is required to identify relevant theme variables. The returned string is raw Sass with all theme variable imports removed. You may prepend new theme variable definitions onto this Sass string and run it through the Sass compiler.
 
 ```javascript
-var sassThematic = require('sass-thematic');
+var thematic = require('sass-thematic');
 
 // Async
-sassThematic.parseThemeSass({
+thematic.parseThemeSass({
   file: './styles/main.scss',
   varsFile: './styles/_theme.scss',
   includePaths: ['./lib/']
@@ -245,20 +245,20 @@ sassThematic.parseThemeSass({
 });
 
 // Sync
-var sassString = sassThematic.parseThemeSassSync({ ...options... });
+var sassString = thematic.parseThemeSassSync({ ...options... });
 ```
 
 ### renderThemeCSS
-- **sassThematic.renderThemeCSS( options, callback )**
-- **sassThematic.renderThemeCSSSync( options )**
+- **thematic.renderThemeCSS( options, callback )**
+- **thematic.renderThemeCSSSync( options )**
 
 Parses, prunes, compiles, and returns a rendered CSS string of selectors that implement your theme variables. A `varsFile` option is required to identify relevant theme variables. A `themeFile` or `themeData` option is required to provide variables used to render the CSS.
 
 ```javascript
-var sassThematic = require('sass-thematic');
+var thematic = require('sass-thematic');
 
 // Async
-sassThematic.renderThemeCSS({
+thematic.renderThemeCSS({
   file: './styles/main.scss',
   varsFile: './styles/_theme.scss',
   themeData: '$color1: red; $color2: green;',
@@ -268,22 +268,22 @@ sassThematic.renderThemeCSS({
 });
 
 // Sync
-var cssString = sassThematic.renderThemeCSSSync({ ...options... });
+var cssString = thematic.renderThemeCSSSync({ ...options... });
 ```
 
 ### renderThemeTemplate
-- **sassThematic.renderThemeTemplate( options, callback )**
-- **sassThematic.renderThemeTemplateSync( options )**
+- **thematic.renderThemeTemplate( options, callback )**
+- **thematic.renderThemeTemplateSync( options )**
 
 Parses, prunes, compiles, and returns a rendered template string of flat CSS rules that implement your theme variables. A `varsFile` option is required to identify relevant theme variables. The returned string is flat CSS with interpolation fields (ie: `<%= var %>`) wrapping theme variables.
 
 This method requires the `node-sass` library installed as a peer dependency. Also note, variable names must pass through the Sass compiler as literals, therefore theme variables may NOT be used as function arguments (ie: `tint($this-will-explode, 10)`) or in math expressions (ie: `$sad-trombone * 0.5`).
 
 ```javascript
-var sassThematic = require('sass-thematic');
+var thematic = require('sass-thematic');
 
 // Async
-sassThematic.renderThemeTemplate({
+thematic.renderThemeTemplate({
   file: './styles/main.scss',
   varsFile: './styles/_theme.scss',
   includePaths: ['./lib/'],
@@ -294,7 +294,7 @@ sassThematic.renderThemeTemplate({
 });
 
 // Sync
-var templateString = sassThematic.renderThemeTemplateSync({ ...options... });
+var templateString = thematic.renderThemeTemplateSync({ ...options... });
 ```
 
 ## Full API Options
@@ -345,7 +345,7 @@ This tool is a self-acknowledged 90% system that attempts to provide good automa
 SassThematic provides a Webpack plugin to live-compile theme assets during development. Example Webpack config:
 
 ```javascript
-var sassThematic = require('sass-thematic');
+var thematic = require('sass-thematic');
 
 var config = {
   module: {
@@ -354,7 +354,7 @@ var config = {
     ]
   },
   plugins: [
-    sassThematic.webpack({
+    thematic.webpack({
       varsFile: '../styles/shared/_theme.scss',
       includePaths: ['./styles/shared'],
       cwd: __dirname,
@@ -384,7 +384,7 @@ var config = {
 
 The SassThematic plugin operates independently from Webpack's main asset pipeline, so you WILL still need to include a standard Sass loader to handle asset compilation. SassThematic is configurable to track assets inside or outside of the main Webpack build – SassThematic will expand the Webpack watch to include all required theme files, and will produce incremental builds from its own AST caches. The SassThematic plugin will add all compiled theme assets into the Webpack asset tree (and thus may be served via Webpack dev middleware).
 
-**Installation:** add a `sassThematic.webpack(...)` call into your Webpack config `plugins` list. The plugin options detail the build of one or more theme stylesheet files. Plugin options are as follows:
+**Installation:** add a `thematic.webpack(...)` call into your Webpack config `plugins` list. The plugin options detail the build of one or more theme stylesheet files. Plugin options are as follows:
 
 - `varsFile`: required. The file of theme variable definitions.
 - `themeFile`: optional. The file of theme variables to render into CSS output.
@@ -403,7 +403,7 @@ It's pretty simple to setup a Gulp pipe that hooks multiple Sass entry point fil
 var gulp = require('gulp');
 var vinyl = require('vinyl');
 var through2 = require('through2');
-var sassThematic = require('sass-thematic');
+var thematic = require('sass-thematic');
 
 // SassThematic Gulp pipe:
 function sassTheme(opts) {
@@ -412,7 +412,7 @@ function sassTheme(opts) {
       opts.file = file.path;
       opts.data = file.contents.toString('utf-8');
 
-      sassThematic.parseThemeSass(opts, function(err, result) {
+      thematic.parseThemeSass(opts, function(err, result) {
         output += result;
         done();
       });
