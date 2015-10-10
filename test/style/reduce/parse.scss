@@ -1,0 +1,12 @@
+@import 'junk';
+@import 'vars';
+
+.junk {
+  color: $junk-color;
+  font-family: serif;
+}
+
+.keep {
+  color: $keep-color;
+  font-family: serif;
+}
