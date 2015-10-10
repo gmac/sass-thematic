@@ -321,6 +321,10 @@ var templateString = thematic.renderThemeTemplateSync({ ...options... });
 
 * **`cwd`**: Path of the directory to resolve `file`, `varsFile`, `themeFile`,  and `includePaths` references from. Uses `process.cwd()` by default.
 
+* **`disableTreeRemoval`**: Disables the removal of tree nodes. Useful when compiling full-source CSS templates.
+
+* **`disableVarsRemoval`**: Disables the removal of theme variable stylesheet imports. Use the Sass `!default` flag when leaving theme variables in the source tree.
+
 * **`templateOpen`**: The opening token for template interpolation fields. Uses ERB-style `<%=` by default.
 
 * **`templateClose`**: The closing token for template interpolation fields. Uses ERB-style `%>` by default.

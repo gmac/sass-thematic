@@ -9,7 +9,6 @@ module.exports = {
       done(err, result.ast);
     });
   },
-
   parseASTSync: function(opts) {
     return AST.parseSync(opts).ast;
   },
@@ -22,7 +21,6 @@ module.exports = {
       done(err, theme.ast);
     });
   },
-
   parseThemeASTSync: function(opts) {
     var result = AST.parseSync(opts);
     var theme = new Thematic(result.ast, opts).parse(opts);
@@ -36,8 +34,22 @@ module.exports = {
       done(err, ast.toString());
     });
   },
-
   parseThemeSassSync: function(opts) {
+    return this.parseThemeASTSync(opts).toString();
+  },
+
+  // parseTemplateSass
+
+  parseTemplateSass: function(opts, done) {
+    opts.template = true;
+    opts.disableTreeRemoval = true;
+    this.parseThemeAST(opts, function(err, ast) {
+      done(err, ast.toString());
+    });
+  },
+  parseTemplateSassSync: function(opts) {
+    opts.template = true;
+    opts.disableTreeRemoval = true;
     return this.parseThemeASTSync(opts).toString();
   },
 
@@ -48,7 +60,6 @@ module.exports = {
       new Thematic(result.ast, opts).css(opts, done);
     });
   },
-
   renderThemeCSSSync: function(opts) {
     var result = AST.parseSync(opts);
     return new Thematic(result.ast, opts).cssSync(opts);
@@ -61,7 +72,6 @@ module.exports = {
       new Thematic(result.ast, opts).template(opts, done);
     });
   },
-
   renderThemeTemplateSync: function(opts) {
     var result = AST.parseSync(opts);
     return new Thematic(result.ast, opts).templateSync(opts);
