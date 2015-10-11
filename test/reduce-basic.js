@@ -131,6 +131,39 @@ describe('basics', function() {
     })
   })
 
+  describe('template pruning errors', function() {
+    var opts = {
+      varsFile: 'style/reduce/_vars.scss',
+      file: 'style/reduce/error.scss',
+      cwd: __dirname,
+      template: true,
+    };
+
+    it ('errors when template theme variables are used as function arguments.', function() {
+      opts.data = '@import "vars"; .error { color: tint($keep-color, 10%); }';
+      
+      assert.throws(function() {
+        new Thematic(AST.parseSync(opts).ast, opts).parse(opts);
+      }, /not permitted as arguments/);
+    })
+
+    it ('errors when template theme variables are used in unary operations (+/-).', function() {
+      opts.data = '@import "vars"; .error { color: $keep-size + 10; }';
+
+      assert.throws(function() {
+        new Thematic(AST.parseSync(opts).ast, opts).parse(opts);
+      }, /not permitted in operations/);
+    })
+
+    it ('errors when template theme variables are used in other operations.', function() {
+      opts.data = '@import "vars"; .error { color: $keep-size * 10; }';
+
+      assert.throws(function() {
+        new Thematic(AST.parseSync(opts).ast, opts).parse(opts);
+      }, /not permitted in operations/);
+    })
+  })
+
   describe('full template parsing', function() {
     var target;
     var opts = {
