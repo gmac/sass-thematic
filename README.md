@@ -248,6 +248,28 @@ thematic.parseThemeSass({
 var sassString = thematic.parseThemeSassSync({ ...options... });
 ```
 
+### parseTemplateSass
+- **thematic.parseTemplateSass( options, callback )**
+- **thematic.parseTemplateSassSync( options )**
+
+Parses and returns a rendered Sass string of your complete source tree with theme variables converted to template fields. Template fields are formatted as `____name____`, and may be sent through the Sass compiler as literals and then parsed into values or interpolation fields in the rendered CSS. This method is under development, and will be used to generate full-source CSS templates. A `varsFile` option is required to identify relevant theme variables.
+
+```javascript
+var thematic = require('sass-thematic');
+
+// Async
+thematic.parseTemplateSass({
+  file: './styles/main.scss',
+  varsFile: './styles/_theme.scss',
+  includePaths: ['./lib/']
+}, function(err, sassString) {
+   console.log(sassString);
+});
+
+// Sync
+var sassString = thematic.parseTemplateSassSync({ ...options... });
+```
+
 ### renderThemeCSS
 - **thematic.renderThemeCSS( options, callback )**
 - **thematic.renderThemeCSSSync( options )**
@@ -321,9 +343,9 @@ var templateString = thematic.renderThemeTemplateSync({ ...options... });
 
 * **`cwd`**: Path of the directory to resolve `file`, `varsFile`, `themeFile`,  and `includePaths` references from. Uses `process.cwd()` by default.
 
-* **`disableTreeRemoval`**: Disables the removal of tree nodes. Useful when compiling full-source CSS templates.
+* **`disableTreeRemoval`**: Disables the removal of tree nodes. Useful when compiling full-source templates.
 
-* **`disableVarsRemoval`**: Disables the removal of theme variable stylesheet imports. Use the Sass `!default` flag when leaving theme variables in the source tree.
+* **`disableVarsRemoval`**: Disables the removal of theme variable stylesheet imports. Be sure to use the Sass `!default` flag when leaving theme variables in the source tree.
 
 * **`templateOpen`**: The opening token for template interpolation fields. Uses ERB-style `<%=` by default.
 
