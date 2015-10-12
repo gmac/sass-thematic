@@ -368,7 +368,7 @@ This tool is a self-acknowledged 90% system that attempts to provide good automa
 
 ## Webpack Plugin
 
-If you want to compile full-source CSS templates with theme variables left as interpolation fields, then see the (sass-theme-template-loader)[https://github.com/gmac/sass-theme-template-loader]. SassThematic provides a Webpack plugin to live-compile theme assets during development. Example Webpack config:
+If you want to compile full-source CSS templates with theme variables left as interpolation fields, then see the [sass-theme-template-loader](https://github.com/gmac/sass-theme-template-loader). SassThematic provides a Webpack plugin to live-compile theme assets during development. Example Webpack config:
 
 ```javascript
 var thematic = require('sass-thematic');
