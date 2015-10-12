@@ -147,6 +147,14 @@ describe('basics', function() {
       }, /not permitted as arguments/);
     })
 
+    it ('errors when template theme variables are used in interpolations.', function() {
+      opts.data = '@import "vars"; .error { color: #{$keep-color}; }';
+      
+      assert.throws(function() {
+        new Thematic(AST.parseSync(opts).ast, opts).parse(opts);
+      }, /not permitted in interpolations/);
+    })
+
     it ('errors when template theme variables are used in unary operations (+/-).', function() {
       opts.data = '@import "vars"; .error { color: $keep-size + 10; }';
 
