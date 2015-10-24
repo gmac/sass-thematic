@@ -17,10 +17,17 @@ describe('basics', function() {
       return text.split('\n').join(' ').replace(/\s+/g, ' ');
     }
 
-    it ('parses theme variables and their values into a mapping table.', function() {
+    it ('parses Sass variables and their values into a mapping table.', function() {
       var theme = new Thematic(JSON.parse(ast.toJson()), opts);
-      assert.equal(theme.vars['$keep-color'], 'green');
-      assert.equal(theme.vars['$keep-size'], 100);
+      assert.equal(theme.vars['keep-color'], 'green');
+      assert.equal(theme.vars['keep-size'], 100);
+    })
+
+    it ('parses JSON variables and their values into a mapping table.', function() {
+      var theme = new Thematic(JSON.parse(ast.toJson()), opts);
+      theme.setThemeVars('{"$keep-color":"papayawhip","$keep-size":500}')
+      assert.equal(theme.vars['keep-color'], 'papayawhip');
+      assert.equal(theme.vars['keep-size'], 500);
     })
 
     it ('prunes variable includes and unthemed tree forks by default.', function() {
