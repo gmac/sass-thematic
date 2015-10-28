@@ -75,12 +75,5 @@ module.exports = {
   renderThemeTemplateSync: function(opts) {
     var result = AST.parseSync(opts);
     return new Thematic(result.ast, opts).templateSync(opts);
-  },
-
-  // Webpack Plugin
-
-  webpack: function(opts) {
-    var ThematicPlugin = require('./lib/webpack-plugin');
-    return new ThematicPlugin(opts);
   }
 };

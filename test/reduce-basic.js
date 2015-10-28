@@ -146,36 +146,35 @@ describe('basics', function() {
       template: true,
     };
 
-    it ('errors when template theme variables are used as function arguments.', function() {
-      opts.data = '@import "vars"; .error { color: tint($keep-color, 10%); }';
+    function assertError(src, error) {
+      opts.data = src;
       
       assert.throws(function() {
         new Thematic(AST.parseSync(opts).ast, opts).parse(opts);
-      }, /not permitted as arguments/);
+      }, error);
+    }
+
+    it ('errors when template theme variables are used as function arguments.', function() {
+      var message = /not permitted as arguments/;
+      assertError('@import "vars"; .error { color: tint($keep-color, 10%); }' , message);
+      assertError('@import "vars"; .error { color: tint(____keep-color____, 10%); }', message);
     })
 
     it ('errors when template theme variables are used in interpolations.', function() {
-      opts.data = '@import "vars"; .error { color: #{$keep-color}; }';
-      
-      assert.throws(function() {
-        new Thematic(AST.parseSync(opts).ast, opts).parse(opts);
-      }, /not permitted in interpolations/);
+      var message = /not permitted in interpolations/;
+      assertError('@import "vars"; .error { color: #{$keep-color}; }', message);
+      // No need to test this format (it's invalid Sass):
+      // color: #{____keep-color____};
     })
 
-    it ('errors when template theme variables are used in unary operations (+/-).', function() {
-      opts.data = '@import "vars"; .error { color: $keep-size + 10; }';
+    it ('errors when template theme variables are used in operations.', function() {
+      var message = /not permitted in operations/;
+      // Check both unary and other operations:
+      assertError('@import "vars"; .error { color: $keep-size + 10; }', message);
+      assertError('@import "vars"; .error { color: $keep-size * 10; }', message);
 
-      assert.throws(function() {
-        new Thematic(AST.parseSync(opts).ast, opts).parse(opts);
-      }, /not permitted in operations/);
-    })
-
-    it ('errors when template theme variables are used in other operations.', function() {
-      opts.data = '@import "vars"; .error { color: $keep-size * 10; }';
-
-      assert.throws(function() {
-        new Thematic(AST.parseSync(opts).ast, opts).parse(opts);
-      }, /not permitted in operations/);
+      assertError('@import "vars"; .error { color: ____keep-size____ + 10; }', message);
+      assertError('@import "vars"; .error { color: ____keep-size____ * 10; }', message);
     })
   })
 

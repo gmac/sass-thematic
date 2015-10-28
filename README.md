@@ -366,60 +366,12 @@ SassThematic currently supports the following basic implementations:
 
 This tool is a self-acknowledged 90% system that attempts to provide good automation for conventional use cases. Sass is a complex and nuanced language, therefore all of these pruning implementations undoubtedly have holes. For best results, review the [tests specs](https://github.com/gmac/sass-thematic/tree/master/test/style/reduce) to see what capabilities exist, and moderate complexity while implementing theme variables.
 
-## Webpack Plugin
+## Webpack Builders
 
-If you want to compile full-source CSS templates with theme variables left as interpolation fields, then see the [sass-theme-template-loader](https://github.com/gmac/sass-theme-template-loader). SassThematic provides a Webpack plugin to live-compile theme assets during development. Example Webpack config:
+As of v2.x, Webpack support has been broken out of SassThematic core and into wrapper modules. Webpack builders are tailored to individual asset pipelines. The following Webpack wrappers are currently available:
 
-```javascript
-var thematic = require('sass-thematic');
-
-var config = {
-  module: {
-    loaders: [
-      { test: /\.scss$/, loader: "style!css!sass?includePaths[]="+path.resolve('./styles/shared') }
-    ]
-  },
-  plugins: [
-    thematic.webpack({
-      varsFile: '../styles/shared/_theme.scss',
-      includePaths: ['./styles/shared'],
-      cwd: __dirname,
-      output: [{
-        includeFiles: [
-          'components/site/base/index.scss',
-          'components/site/auth/index.scss'
-        ],
-        template: {
-          filename: 'theme.css.erb',
-          writePath: '../views/theme',
-          templateOpen: '<%= @theme[:',
-          templateClose: '] %>',
-          templateSnakeCase: true,
-          outputStyle: 'compressed',
-          header: '<%= @theme[:theme_prefix] %>',
-          footer: '<%= @theme[:theme_postfix] %>'
-        },
-        css: {
-          filename: 'theme.css'
-        }
-      }]
-    })
-  ]
-}
-```
-
-The SassThematic plugin operates independently from Webpack's main asset pipeline, so you WILL still need to include a standard Sass loader to handle asset compilation. SassThematic is configurable to track assets inside or outside of the main Webpack build – SassThematic will expand the Webpack watch to include all required theme files, and will produce incremental builds from its own AST caches. The SassThematic plugin will add all compiled theme assets into the Webpack asset tree (and thus may be served via Webpack dev middleware).
-
-**Installation:** add a `thematic.webpack(...)` call into your Webpack config `plugins` list. The plugin options detail the build of one or more theme stylesheet files. Plugin options are as follows:
-
-- `varsFile`: required. The file of theme variable definitions.
-- `themeFile`: optional. The file of theme variables to render into CSS output.
-- `includePaths`: optional. An array of locations to include in file import lookups.
-- `cwd`: optional. A current working directory to resolve relative paths from.
-- `output`: required. An object (or array of objects) detailing each theme resource to generate. Each resource may be configured to output a CSS file and a template file.
-- `output[].includeFiles`: required. An _ordered_ array of Sass files to include in this theme output.
-- `output[].template`: parameters detailing the render of this output's template. This template file will be published to your standard Webpack output location. Include a `writePath` option to also write the file to a custom output location (useful for writing templates into an app directory).
-- `output[].css`: parameters detailing the render of this output's CSS stylesheet. This css asset will be published to your standard Webpack output location. Include a `writePath` option to also write the file to a custom output location.
+- [sass-theme-template-loader](https://github.com/gmac/sass-theme-template-loader): compiles full-source CSS templates with theme variables as interpolation fields.
+- [sass-thematic-webpack-plugin](https://github.com/gmac): live compiles Sass thematic assets.
 
 ## Gulp Pipe
 
