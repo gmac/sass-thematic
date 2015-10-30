@@ -21,148 +21,10 @@ This is SassThematic.
 
 ## How it works:
 
-### 1. Structure
+SassThematic provides two unique strategies for generating themed CSS; each provides a different approach to the problem. An overview of each strategy is available on the wiki:
 
-First, we setup a sanctioned file in our Sass library that defines all theme variables. We'll extract the names of these theme variables when generating a theme stylesheet. For example:
-
-**In *_theme_vars.scss*:**
-
-```css
-$theme-color: green;
-```
-
-**In *_other_vars.scss*:**
-
-```css
-$other-color: red;
-```
-
-**In *main.scss*:**
-
-```css
-@import 'theme_vars';
-@import 'other_vars';
-
-@mixin mixin-other {
-  color: $other-color;
-  font-family: serif;
-}
-
-@mixin mixin-theme {
-  color: $theme-color;
-  font-family: serif;
-}
-
-.other {
-  color: $other-color;
-  font-family: serif;
-}
-
-.theme {
-  color: $theme-color;
-  font-family: serif;
-}
-
-.include-other {
-  @include mixin-other;
-}
-
-.include-theme {
-  @include mixin-theme;
-}
-```
-
-Now we can run SassThematic with references to our theme variables file, and to our main Sass file. All SassThematic methods operate similar to [node-sass](https://www.npmjs.com/package/node-sass), with an `includePaths` option for resolving imports:
-
-```javascript
-var thematic = require('sass-thematic');
-
-thematic.parseThemeSass({
-  varsFile: './styles/_vars.scss',
-  file: './styles/main.scss',
-  includePaths: ['./lib/']
-},
-function(err, sassString) {
-  console.log(sassString);
-});
-```
-
-### 2. Parse
-
-Next, SassThematic reconstitutes our main Sass file's deeply-nested source tree of `@import` statements, and then parses that flattened source into a complete abstract syntax tree (AST) using the fabulous [gonzales-pe](https://github.com/tonyganch/gonzales-pe) lexer:
-
-```css
-$theme-color: green;
-$other-color: red;
-
-@mixin mixin-other {
-  color: $other-color;
-  font-family: serif;
-}
-
-@mixin mixin-theme {
-  color: $theme-color;
-  font-family: serif;
-}
-
-.other {
-  color: $other-color;
-  font-family: serif;
-}
-
-.theme {
-  color: $theme-color;
-  font-family: serif;
-}
-
-.include-other {
-  @include mixin-other;
-}
-
-.include-theme {
-  @include mixin-theme;
-}
-```
-
-### 3. Prune
-
-Now SassThematic traverses the parsed AST, dropping any rulesets and/or declarations that do not implement a theme variable (dropped syntax is replaced by a comment). This pruning accounts for `@include`, `@extend`, and many other inflected rule dependencies. This results in a minimal Sass file that can be compiled with new theme variables prepended:
-
-```css
-// varsfile
-$other-color: red;
-
-// mixin
-
-@mixin mixin-theme {
-  color: $theme-color;
-  // declaration
-}
-
-// ruleset
-
-.theme {
-  color: $theme-color;
-  // declaration
-}
-
-// ruleset
-
-.include-theme {
-  @include mixin-theme;
-}
-```
-
-### 4. Template
-
-Parsing theme variables into a view template is generally simpler to integrate than compiling custom assets for each theme. Therefore, we can also render our Sass theme into flat CSS with variable names passed through as template fields:
-
-```css
-.theme { color: <%= theme-color %>; }
-.include-theme { color: <%= theme-color %>; }
-```
-
-The only caveat with generating templates is that variable names need to pass through the actual Sass compiler as _literals_, therefore we cannot use theme variables as function arguments (ie: `tint($this-will-explode, 10)`) or in math expressions (ie: `$sad-trombone * 0.5`).
+1. [Theme Override Stylesheet](https://github.com/gmac/sass-thematic/wiki/Theme-Override-Stylesheet)
+1. [Full-CSS Themed Template](https://github.com/gmac/sass-thematic/wiki/Theme-CSS-Template)
 
 ## Install
 
@@ -352,6 +214,10 @@ var templateString = thematic.renderThemeTemplateSync({ ...options... });
 * **`templateClose`**: The closing token for template interpolation fields. Uses ERB-style `%>` by default.
 
 * **`templateSnakeCase`**: Boolean. Set as `true` to transform all template variable names to `snake_case` (lowercase with underscores).
+
+* **`fieldOpen`**: The opening token wrapping field literals that get sent through the Sass compiler. Uses `____` by default.
+
+* **`fieldClose`**: The closing token wrapping field literals that get sent through the Sass compiler. Uses `____` by default.
 
 * **`outputStyle`**: For rendering methods, this option is passed through to the Sass compiler to define output format. See [node-sass](https://www.npmjs.com/package/node-sass) docs for possible values.
 
