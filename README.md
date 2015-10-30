@@ -5,7 +5,7 @@
 * [How it works](#how-it-works)
 * [Installation, Upgrade, and API](#install)
 * [Full API options](#full-api-options)
-* [Webpack integration](#webpack-plugin)
+* [Webpack integration](#webpack-builders)
 * [Gulp integration](#gulp-pipe)
 * [Credits](#credit)
 
