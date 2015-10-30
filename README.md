@@ -5,7 +5,7 @@
 * [How it works](#how-it-works)
 * [Installation, Upgrade, and API](#install)
 * [Full API options](#full-api-options)
-* [Webpack integration](#webpack-plugin)
+* [Webpack integration](#webpack-builders)
 * [Gulp integration](#gulp-pipe)
 * [Credits](#credit)
 
@@ -172,12 +172,12 @@ Install the NPM package:
 npm install sass-thematic --save-dev
 ```
 
-## Upgrading to v1.x
+## Upgrading to v2.x
 
-While the v1.x framework has the same API as the v0.x series, internal operations of the tool have changed significantly, thus meriting the major version bump. Potentially breaking changes:
+While the v2.x framework has mostly the same API as the v0.x series, internal operations of the tool have changed significantly, thus meriting the major version bump. Potentially breaking changes:
 
- - Dropped support for directory imports. Importing follows official [Sass import docs](http://sass-lang.com/documentation/file.SASS_REFERENCE.html#import).
- - Sass version to v3.3 for rendering methods. Dropped support for Sass v2.x.
+ - Webpack integration broken out. Webpack plugins shall independently wrap this module.
+ - Upgrades to Gonzales-PE latest, and adjusts implementation to match new parsing operations.
 
 ## API
 
@@ -368,10 +368,10 @@ This tool is a self-acknowledged 90% system that attempts to provide good automa
 
 ## Webpack Builders
 
-As of v2.x, Webpack support has been broken out of SassThematic core and into wrapper modules. Webpack builders are tailored to individual asset pipelines. The following Webpack wrappers are currently available:
+As of v2.x, Webpack integration has been broken out into wrapper modules. Build objectives vary wildly, so SassThematic remains unopinionated about how it hooks into a build pipeline. The following Webpack wrappers exist:
 
 - [sass-theme-template-loader](https://github.com/gmac/sass-theme-template-loader): compiles full-source CSS templates with theme variables as interpolation fields.
-- [sass-thematic-webpack-plugin](https://github.com/gmac): live compiles Sass thematic assets.
+- [sass-thematic-webpack-plugin](https://github.com/gmac/sass-thematic/blob/v1.3.0/lib/webpack-plugin.js): original live-compiler implementation included in SassThematic v1.3. No longer maintained by author, but available if anyone wants to break it out into a community project.
 
 ## Gulp Pipe
 
