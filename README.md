@@ -371,7 +371,7 @@ This tool is a self-acknowledged 90% system that attempts to provide good automa
 As of v2.x, Webpack integration has been broken out into wrapper modules. Build objectives vary wildly, so SassThematic remains unopinionated about how it hooks into a build pipeline. The following Webpack wrappers exist:
 
 - [sass-theme-template-loader](https://github.com/gmac/sass-theme-template-loader): compiles full-source CSS templates with theme variables as interpolation fields.
-- [sass-thematic-webpack-plugin](https://github.com/gmac/sass-thematic/blob/master/lib/webpack-plugin.js): original live-compiler implementation included in SassThematic v1.x. No longer maintained by author, but available if anyone wants to break it out into a community project.
+- [sass-thematic-webpack-plugin](https://github.com/gmac/sass-thematic/blob/v1.3.0/lib/webpack-plugin.js): original live-compiler implementation included in SassThematic v1.3. No longer maintained by author, but available if anyone wants to break it out into a community project.
 
 ## Gulp Pipe
 
