@@ -2,7 +2,7 @@
 
 **A framework for generating dynamic theme stylesheets from Sass.**
 
-* [How it works](#how-it-works)
+* [Workflows](#workflows)
 * [Installation, Upgrade, and API](#install)
 * [Full API options](#full-api-options)
 * [Webpack integration](#webpack-builders)
@@ -15,16 +15,16 @@ We're building a site that gets themed with customizable colors, fonts, sizes, e
 
 ![](https://cdn2.vox-cdn.com/thumbor/URBw1hzRV7J438s5EUDF8wNszyg=/0x0:1803x1014/1400x788/filters:format(webp)/cdn0.vox-cdn.com/uploads/chorus_image/image/46706550/themes.0.0.jpg)
 
-This works, but makes updates difficult. All changes in the base stylesheet must be mirrored in the theme-specific overrides. Keeping these stylesheets synchronized is tedious and error-prone. It would be great if we could just _automate_ the generation of these theme overrides from the base source... or, just generate a CSS template that can be rendered by our application with site-specific variables.
+This works, but makes updates difficult. All changes in the base stylesheet must be mirrored in the theme-specific overrides. Keeping these stylesheets synchronized is tedious and error-prone. It would be great if we could just _automate_ the generation of these theme overrides from the base source... or, just generate a CSS template to be rendered by our application with theme variables at runtime.
 
 This is SassThematic.
 
-## How it works:
+## Workflows
 
-SassThematic provides two unique strategies for generating themed CSS; each provides a different approach to the problem. An overview of each strategy is available on the wiki:
+SassThematic accomodates two unique workflows for generating CSS themes – each takes a different approach to the problem. A process overview for each workflow is available on the wiki:
 
-1. [Theme Override Stylesheet](https://github.com/gmac/sass-thematic/wiki/Theme-Override-Stylesheet)
-1. [Full-CSS Themed Template](https://github.com/gmac/sass-thematic/wiki/Theme-CSS-Template)
+1. [Theme Override Workflow](https://github.com/gmac/sass-thematic/wiki/Theme-Override-Workflow)
+1. [Theme Template Workflow](https://github.com/gmac/sass-thematic/wiki/Theme-Template-Workflow)
 
 ## Install
 
@@ -114,7 +114,7 @@ var sassString = thematic.parseThemeSassSync({ ...options... });
 - **thematic.parseTemplateSass( options, callback )**
 - **thematic.parseTemplateSassSync( options )**
 
-Parses and returns a rendered Sass string of your complete source tree with theme variables converted to template fields. Template fields are formatted as `____name____`, and may be sent through the Sass compiler as literals and then parsed into values or interpolation fields in the rendered CSS. This method is under development, and will be used to generate full-source CSS templates. A `varsFile` option is required to identify relevant theme variables.
+Parses and returns a rendered Sass string of your complete source tree with theme variables converted to template fields. Template fields are formatted as `____name____`, and may be sent through the Sass compiler as literals and then parsed into values or interpolation fields in the rendered CSS. A `varsFile` option is required to identify relevant theme variables.
 
 ```javascript
 var thematic = require('sass-thematic');
@@ -215,9 +215,9 @@ var templateString = thematic.renderThemeTemplateSync({ ...options... });
 
 * **`templateSnakeCase`**: Boolean. Set as `true` to transform all template variable names to `snake_case` (lowercase with underscores).
 
-* **`fieldOpen`**: The opening token wrapping field literals that get sent through the Sass compiler. Uses `____` by default.
+* **`fieldOpen`**: The opening token wrapping field literals that get sent through the Sass compiler. Uses `____` (four underscores) by default.
 
-* **`fieldClose`**: The closing token wrapping field literals that get sent through the Sass compiler. Uses `____` by default.
+* **`fieldClose`**: The closing token wrapping field literals that get sent through the Sass compiler. Uses `____` (four underscores) by default.
 
 * **`outputStyle`**: For rendering methods, this option is passed through to the Sass compiler to define output format. See [node-sass](https://www.npmjs.com/package/node-sass) docs for possible values.
 
