@@ -2,7 +2,7 @@
 
 **A framework for generating dynamic theme stylesheets from Sass.**
 
-* [How it works](#how-it-works)
+* [Workflows](#workflows)
 * [Installation, Upgrade, and API](#install)
 * [Full API options](#full-api-options)
 * [Webpack integration](#webpack-builders)
@@ -19,12 +19,12 @@ This works, but makes updates difficult. All changes in the base stylesheet must
 
 This is SassThematic.
 
-## Getting Started
+## Workflows
 
-SassThematic supports two unique strategies for generating themed CSS – each provides a different approach to the problem. A process overview for each strategy is available on the wiki:
+SassThematic accomodates two unique workflows for generating CSS themes – each takes a different approach to the problem. A process overview for each workflow is available on the wiki:
 
-1. [Theme Override Stylesheet](https://github.com/gmac/sass-thematic/wiki/Theme-Override-Stylesheet)
-1. [Full-CSS Themed Template](https://github.com/gmac/sass-thematic/wiki/Theme-CSS-Template)
+1. [Theme Override Workflow](https://github.com/gmac/sass-thematic/wiki/Theme-Override-Workflow)
+1. [Theme Template Workflow](https://github.com/gmac/sass-thematic/wiki/Theme-Template-Workflow)
 
 ## Install
 
