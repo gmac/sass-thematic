@@ -114,7 +114,7 @@ var sassString = thematic.parseThemeSassSync({ ...options... });
 - **thematic.parseTemplateSass( options, callback )**
 - **thematic.parseTemplateSassSync( options )**
 
-Parses and returns a rendered Sass string of your complete source tree with theme variables converted to template fields. Template fields are formatted as `____name____`, and may be sent through the Sass compiler as literals and then parsed into values or interpolation fields in the rendered CSS. This method is under development, and will be used to generate full-source CSS templates. A `varsFile` option is required to identify relevant theme variables.
+Parses and returns a rendered Sass string of your complete source tree with theme variables converted to template fields. Template fields are formatted as `____name____`, and may be sent through the Sass compiler as literals and then parsed into values or interpolation fields in the rendered CSS. A `varsFile` option is required to identify relevant theme variables.
 
 ```javascript
 var thematic = require('sass-thematic');
@@ -215,9 +215,9 @@ var templateString = thematic.renderThemeTemplateSync({ ...options... });
 
 * **`templateSnakeCase`**: Boolean. Set as `true` to transform all template variable names to `snake_case` (lowercase with underscores).
 
-* **`fieldOpen`**: The opening token wrapping field literals that get sent through the Sass compiler. Uses `____` by default.
+* **`fieldOpen`**: The opening token wrapping field literals that get sent through the Sass compiler. Uses `____` (four underscores) by default.
 
-* **`fieldClose`**: The closing token wrapping field literals that get sent through the Sass compiler. Uses `____` by default.
+* **`fieldClose`**: The closing token wrapping field literals that get sent through the Sass compiler. Uses `____` (four underscores) by default.
 
 * **`outputStyle`**: For rendering methods, this option is passed through to the Sass compiler to define output format. See [node-sass](https://www.npmjs.com/package/node-sass) docs for possible values.
 
