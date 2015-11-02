@@ -185,41 +185,43 @@ var templateString = thematic.renderThemeTemplateSync({ ...options... });
 
 #### Required for all methods, one or both:
 
-* **`file`**: String path to the main Sass file to load and parse. This may be an absolute path, or else a relative path from `cwd`.
+* **`file`**: String. Path to the main Sass file to load and parse. This may be an absolute path, or else a relative path from `cwd`.
 
-* **`data`**: A Sass string to parse. You may still provide a `file` option as filepath context for mapping imports.
+* **`data`**: String. A raw Sass string to parse. You may still provide a `file` option as filepath context for mapping imports.
 
-#### Required for theme parsing methods:
+#### Required for theme parsing methods, one of:
 
-* **`varsFile`**: String path to a file containing all theme variables. This may be an absolute path, or else a relative path from `cwd`. This file must contain all theme variable definitions, and nothing else.
+* **`varsFile`**: String. Path to a file containing all theme variables. This may be an absolute path, or else a relative path from `cwd`. This file must contain all theme variable definitions, and nothing else. Variables may be formatted as Sass or JSON.
+
+* **`varsData`**: String. Data containing variable definitions for all theme variables. Should be formatted as Sass (`$color1: red; $color2: black;`) or JSON (`{"color1": "red", "color2": "black"}`).
 
 #### Required for theme rendering methods, one of:
 
-* **`themeFile`**: String path to a file containing all theme variables to render CSS with. This may be an absolute path, or else a relative path from `cwd`.
+* **`themeFile`**: String. Path to a file containing all theme variables to render CSS with. This may be an absolute path, or else a relative path from `cwd`.
 
-* **`themeData`**: String data containing Sass variable definitions for all theme variables to render CSS with. Should be formatted as `$color1: red; $color2: black;`.
+* **`themeData`**: String. Data containing Sass variable definitions for all theme variables rendered into CSS. Should be formatted as Sass (`$color1: red; $color2: black;`) or JSON (`{"color1": "red", "color2": "black"}`).
 
 #### Optional options:
 
-* **`includePaths`**: Array of base paths to search while performing file lookups. These should be absolute directory paths, or else relative to `cwd`. This operates just like the `node-sass` option of the same name.
+* **`includePaths`**: Array. List of base paths to search while performing file lookups. These should be absolute directory paths, or else relative to `cwd`. This operates just like the `node-sass` option of the same name.
 
-* **`cwd`**: Path of the directory to resolve `file`, `varsFile`, `themeFile`,  and `includePaths` references from. Uses `process.cwd()` by default.
+* **`cwd`**: String. Path of the directory to resolve `file`, `varsFile`, `themeFile`,  and `includePaths` references from. Uses `process.cwd()` by default.
 
-* **`disableTreeRemoval`**: Disables the removal of tree nodes. Useful when compiling full-source templates.
+* **`treeRemoval`**: Boolean. Enables the removal of tree nodes that do not implement theme variables.
 
-* **`disableVarsRemoval`**: Disables the removal of theme variable stylesheet imports. Be sure to use the Sass `!default` flag when leaving theme variables in the source tree.
+* **`varsRemoval`**: Boolean. Enables the removal of theme variable imports. Be sure to use the Sass `!default` flag when leaving theme variable imports in the source tree.
 
-* **`templateOpen`**: The opening token for template interpolation fields. Uses ERB-style `<%=` by default.
+* **`templateOpen`**: String. The opening token for template interpolation fields. Uses ERB-style `<%=` by default.
 
-* **`templateClose`**: The closing token for template interpolation fields. Uses ERB-style `%>` by default.
+* **`templateClose`**: String. The closing token for template interpolation fields. Uses ERB-style `%>` by default.
 
-* **`templateSnakeCase`**: Boolean. Set as `true` to transform all template variable names to `snake_case` (lowercase with underscores).
+* **`templateSnakeCase`**: Boolean. Enables the transformation of template variable names into `snake_case` (lowercase with underscores).
 
-* **`fieldOpen`**: The opening token wrapping field literals that get sent through the Sass compiler. Uses `____` (four underscores) by default.
+* **`fieldOpen`**: String. The opening token wrapping field literals that get sent through the Sass compiler. Uses `____` (four underscores) by default.
 
-* **`fieldClose`**: The closing token wrapping field literals that get sent through the Sass compiler. Uses `____` (four underscores) by default.
+* **`fieldClose`**: String. The closing token wrapping field literals that get sent through the Sass compiler. Uses `____` (four underscores) by default.
 
-* **`outputStyle`**: For rendering methods, this option is passed through to the Sass compiler to define output format. See [node-sass](https://www.npmjs.com/package/node-sass) docs for possible values.
+* **`sassOptions`**: Object. For rendering methods, this options object is passed through to the Sass compiler. See [node-sass](https://www.npmjs.com/package/node-sass) docs for possible values.
 
 ## Pruning
 
