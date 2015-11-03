@@ -13,7 +13,7 @@ Thematic.parseASTSync = function(opts) {
   return AST.parseSync(opts).ast;
 };
 
-// parseTemplateSass
+// parseSass
 
 Thematic.parseSass = function(opts, done) {
   this.parseAST(opts, function(err, ast) {
@@ -28,7 +28,7 @@ Thematic.parseSassSync = function(opts) {
   return thematic.ast.toString();
 };
 
-// renderThemeCSS
+// renderCSS
 
 Thematic.renderCSS = function(opts, done) {
   AST.parse(opts, function(err, result) {
@@ -41,7 +41,7 @@ Thematic.renderCSSSync = function(opts) {
   return new Thematic(result.ast, opts).toCSSSync(opts);
 };
 
-// renderThemeTemplate
+// renderTemplate
 
 Thematic.renderTemplate = function(opts, done) {
   AST.parse(opts, function(err, result) {

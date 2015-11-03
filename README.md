@@ -1,6 +1,6 @@
 ![SassThematic](title.png)
 
-**A framework for generating dynamic theme stylesheets from Sass.**
+**A parser for generating dynamic theme stylesheets from Sass.**
 
 * [Workflows](#workflows)
 * [Installation, Upgrade, and API](#install)
@@ -23,8 +23,8 @@ This is SassThematic.
 
 SassThematic accomodates two unique workflows for generating CSS themes – each takes a different approach to the problem. A process overview for each workflow is available on the wiki:
 
-1. [Theme Override Workflow](https://github.com/gmac/sass-thematic/wiki/Theme-Override-Workflow)
-1. [Theme Template Workflow](https://github.com/gmac/sass-thematic/wiki/Theme-Template-Workflow)
+* [Theme Override Workflow](https://github.com/gmac/sass-thematic/wiki/Theme-Override-Workflow)
+* [Theme Template Workflow](https://github.com/gmac/sass-thematic/wiki/Theme-Template-Workflow)
 
 ## Install
 
@@ -36,14 +36,15 @@ npm install sass-thematic --save-dev
 
 ## Upgrading to v2.x
 
-While the v2.x framework has mostly the same API as the v0.x series, internal operations of the tool have changed significantly, thus meriting the major version bump. Potentially breaking changes:
+The v2.x API has changed significantly to better support selecting a workflow. Breaking changes:
 
- - Webpack integration broken out. Webpack plugins shall independently wrap this module.
+ - Smaller API, tailored via options. Tree pruning no longer happens by default.
+ - Webpack integration removed. Webpack plugins should independently wrap this module.
  - Upgrades to Gonzales-PE latest, and adjusts implementation to match new parsing operations.
 
 ## API
 
-SassThematic provides the following API. All methods take roughly the same options, which are fully [outlined below](#full-api-options). As of v1.x, all methods have sync and async implementations.
+SassThematic provides the following API. All methods take similar options, which are fully [outlined below](#full-api-options).
 
 ### parseAST
 - **thematic.parseAST( options, callback )**
@@ -66,83 +67,53 @@ thematic.parseAST({
 var ast = thematic.parseASTSync({ ...options... });
 ```
 
-### parseThemeAST
-- **thematic.parseThemeAST( options, callback )**
-- **thematic.parseThemeASTSync( options )**
+### parseSass
+- **thematic.parseSass( options, callback )**
+- **thematic.parseSassSync( options )**
 
-Parses, prunes, and returns an abstract syntax tree of just your Sass that implements theme variables. A `varsFile` option is required to identify relevant theme variables. This variables file should include *nothing* but variable definitions. The returned object is a [gonzales-pe](https://github.com/tonyganch/gonzales-pe) node tree.
+Parses and returns a raw Sass string of your deeply-nested Sass source with optional transformations applied. This raw Sass may be run through the Sass compiler. Options:
 
-```javascript
-var thematic = require('sass-thematic');
-
-// Async
-thematic.parseThemeAST({
-  file: './styles/main.scss',
-  varsFile: './styles/_theme.scss',
-  includePaths: ['./lib/']
-}, function(err, ast) {
-   console.log(ast);
-});
-
-// Sync
-var ast = thematic.parseThemeASTSync({ ...options... });
-```
-
-### parseThemeSass
-- **thematic.parseThemeSass( options, callback )**
-- **thematic.parseThemeSassSync( options )**
-
-Parses, prunes, and returns a rendered Sass string of rules that implement your theme variables. A `varsFile` option is required to identify relevant theme variables. The returned string is raw Sass with all theme variable imports removed. You may prepend new theme variable definitions onto this Sass string and run it through the Sass compiler.
+* `varsFile` or `varsData`: required to identify relevant theme variables.
+* `treeRemoval`: optionally removes Sass rules that do not implement theme variables.
+* `varsRemoval`: optionally removes theme variable imports.
+* `template`: optionally transforms theme variables into template identifiers.
 
 ```javascript
 var thematic = require('sass-thematic');
 
 // Async
-thematic.parseThemeSass({
+thematic.parseSass({
   file: './styles/main.scss',
   varsFile: './styles/_theme.scss',
-  includePaths: ['./lib/']
+  includePaths: ['./lib/'],
+  treeRemoval: true,
+  varsRemoval: true,
+  template: true
 }, function(err, sassString) {
    console.log(sassString);
 });
 
 // Sync
-var sassString = thematic.parseThemeSassSync({ ...options... });
+var sassString = thematic.parseSassSync({ ...options... });
 ```
 
-### parseTemplateSass
-- **thematic.parseTemplateSass( options, callback )**
-- **thematic.parseTemplateSassSync( options )**
+### renderCSS
+- **thematic.renderCSS( options, callback )**
+- **thematic.renderCSSSync( options )**
 
-Parses and returns a rendered Sass string of your complete source tree with theme variables converted to template fields. Template fields are formatted as `____name____`, and may be sent through the Sass compiler as literals and then parsed into values or interpolation fields in the rendered CSS. A `varsFile` option is required to identify relevant theme variables.
+Renders a CSS string from your Sass source. Sass is parsed with optional transformations applied, then custom theme variables are prepended, and lastly this custom themed Sass is run through the Sass compiler. Options:
+
+* `varsFile` or `varsData`: required to identify relevant theme variables.
+* `themeFile` or `themeData`: required to provide variables for the themed CSS rendering.
+* `treeRemoval`: optionally removes Sass rules that do not implement theme variables.
+* `varsRemoval`: optionally removes theme variable imports.
+* `sassOptions`: options object passed to the Node-Sass compiler.
 
 ```javascript
 var thematic = require('sass-thematic');
 
 // Async
-thematic.parseTemplateSass({
-  file: './styles/main.scss',
-  varsFile: './styles/_theme.scss',
-  includePaths: ['./lib/']
-}, function(err, sassString) {
-   console.log(sassString);
-});
-
-// Sync
-var sassString = thematic.parseTemplateSassSync({ ...options... });
-```
-
-### renderThemeCSS
-- **thematic.renderThemeCSS( options, callback )**
-- **thematic.renderThemeCSSSync( options )**
-
-Parses, prunes, compiles, and returns a rendered CSS string of selectors that implement your theme variables. A `varsFile` option is required to identify relevant theme variables. A `themeFile` or `themeData` option is required to provide variables used to render the CSS.
-
-```javascript
-var thematic = require('sass-thematic');
-
-// Async
-thematic.renderThemeCSS({
+thematic.renderCSS({
   file: './styles/main.scss',
   varsFile: './styles/_theme.scss',
   themeData: '$color1: red; $color2: green;',
@@ -152,22 +123,30 @@ thematic.renderThemeCSS({
 });
 
 // Sync
-var cssString = thematic.renderThemeCSSSync({ ...options... });
+var cssString = thematic.renderCSSSync({ ...options... });
 ```
 
-### renderThemeTemplate
-- **thematic.renderThemeTemplate( options, callback )**
-- **thematic.renderThemeTemplateSync( options )**
+### renderTemplate
+- **thematic.renderTemplate( options, callback )**
+- **thematic.renderTemplateSync( options )**
 
-Parses, prunes, compiles, and returns a rendered template string of flat CSS rules that implement your theme variables. A `varsFile` option is required to identify relevant theme variables. The returned string is flat CSS with interpolation fields (ie: `<%= var %>`) wrapping theme variables.
+Renders a CSS template string from your Sass source. Sass is parsed with theme variables preserved as identifiers (and other optional transformations applied), then CSS is compiled from the transformed source, and lastly field identifiers are filled back in with template interpolation fields. Options:
 
-This method requires the `node-sass` library installed as a peer dependency. Also note, variable names must pass through the Sass compiler as literals, therefore theme variables may NOT be used as function arguments (ie: `tint($this-will-explode, 10)`) or in math expressions (ie: `$sad-trombone * 0.5`).
+* `varsFile` or `varsData`: required to identify relevant theme variables.
+* `treeRemoval`: optionally removes Sass rules that do not implement theme variables.
+* `varsRemoval`: optionally removes theme variable imports.
+* `templateOpen`: token used to open template interpolation fields (ie: `<%=`).
+* `templateClose`: token used to close template interpolation fields (ie: `%>`).
+* `templateSnakeCase`: formats all variable names as `snake_case` (lowercase with underscores).
+* `sassOptions`: options object passed to the Node-Sass compiler.
+
+Note: theme variable names must pass through the Sass compiler as literal string identifiers, therefore [restrictions apply](https://github.com/gmac/sass-thematic/wiki/Theme-Template-Workflow#restrictions) on how theme variables may be used in pre-rendered Sass contexts.
 
 ```javascript
 var thematic = require('sass-thematic');
 
 // Async
-thematic.renderThemeTemplate({
+thematic.renderTemplate({
   file: './styles/main.scss',
   varsFile: './styles/_theme.scss',
   includePaths: ['./lib/'],
@@ -178,7 +157,7 @@ thematic.renderThemeTemplate({
 });
 
 // Sync
-var templateString = thematic.renderThemeTemplateSync({ ...options... });
+var templateString = thematic.renderTemplateSync({ ...options... });
 ```
 
 ## Full API Options
@@ -189,13 +168,13 @@ var templateString = thematic.renderThemeTemplateSync({ ...options... });
 
 * **`data`**: String. A raw Sass string to parse. You may still provide a `file` option as filepath context for mapping imports.
 
-#### Required for theme parsing methods, one of:
+#### Required for Sass parsing methods, one of:
 
 * **`varsFile`**: String. Path to a file containing all theme variables. This may be an absolute path, or else a relative path from `cwd`. This file must contain all theme variable definitions, and nothing else. Variables may be formatted as Sass or JSON.
 
 * **`varsData`**: String. Data containing variable definitions for all theme variables. Should be formatted as Sass (`$color1: red; $color2: black;`) or JSON (`{"color1": "red", "color2": "black"}`).
 
-#### Required for theme rendering methods, one of:
+#### Required for CSS rendering methods, one of:
 
 * **`themeFile`**: String. Path to a file containing all theme variables to render CSS with. This may be an absolute path, or else a relative path from `cwd`.
 
@@ -222,17 +201,6 @@ var templateString = thematic.renderThemeTemplateSync({ ...options... });
 * **`fieldClose`**: String. The closing token wrapping field literals that get sent through the Sass compiler. Uses `____` (four underscores) by default.
 
 * **`sassOptions`**: Object. For rendering methods, this options object is passed through to the Sass compiler. See [node-sass](https://www.npmjs.com/package/node-sass) docs for possible values.
-
-## Pruning
-
-SassThematic currently supports the following basic implementations:
-
-* Removing unthemed rulesets and declarations.
-* Removing unthemed mixins and their `@include` implementation.
-* Removing unthemed `@extend` implementations.
-* Removing unthemed loops (`@for`, `@each`), with basic local variable inflection.
-
-This tool is a self-acknowledged 90% system that attempts to provide good automation for conventional use cases. Sass is a complex and nuanced language, therefore all of these pruning implementations undoubtedly have holes. For best results, review the [tests specs](https://github.com/gmac/sass-thematic/tree/master/test/style/reduce) to see what capabilities exist, and moderate complexity while implementing theme variables.
 
 ## Webpack Builders
 

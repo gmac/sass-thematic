@@ -1,7 +1,7 @@
 {
   "name": "sass-thematic",
   "version": "2.0.0",
-  "description": "A framework for generating dynamic theme stylesheets from Sass.",
+  "description": "A parser for generating dynamic theme stylesheets from Sass.",
   "keywords": [
     "sass",
     "theme",
