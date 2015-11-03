@@ -162,7 +162,7 @@ var templateString = thematic.renderTemplateSync({ ...options... });
 
 ## Parser API
 
-The primary API above is designed to accomodate common use-cases. However, custom build tools may want to take advantage of the underlying parser API, documented on the wiki.
+The primary API above is designed to accomodate common use-cases. However, custom build tools may want to take advantage of the underlying [parser API](https://github.com/gmac/sass-thematic/wiki/Parser-API), documented on the wiki.
 
 ## Full API Options
 
@@ -208,10 +208,10 @@ The primary API above is designed to accomodate common use-cases. However, custo
 
 ## Webpack Builders
 
-As of v2.x, Webpack integration has been broken out into wrapper modules. Build objectives vary wildly, so SassThematic remains unopinionated about how it hooks into a build pipeline. The following Webpack wrappers exist:
+As of v2.x, Webpack integration has been broken out into wrapper modules. Build objectives vary, therefore SassThematic remains unopinionated about how it hooks into a build pipeline. The following Webpack wrappers exist:
 
-- [sass-theme-template-loader](https://github.com/gmac/sass-theme-template-loader): compiles full-source CSS templates with theme variables as interpolation fields.
-- [sass-thematic-webpack-plugin](https://github.com/gmac/sass-thematic/blob/v1.3.0/lib/webpack-plugin.js): original live-compiler implementation included in SassThematic v1.3. No longer maintained by author, but available if anyone wants to break it out into a community project.
+- [sass-theme-template-loader](https://github.com/gmac/sass-theme-template-loader): compiles CSS templates with theme variables as interpolation fields.
+- [sass-thematic-override-plugin](https://github.com/gmac/sass-thematic/blob/v1.3.0/lib/webpack-plugin.js): a live-compiler for theme overrides included in SassThematic v1.3. No longer supported, but available if anyone wants to spin it into a community project.
 
 ## Gulp Pipe
 
