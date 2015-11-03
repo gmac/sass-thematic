@@ -160,6 +160,10 @@ thematic.renderTemplate({
 var templateString = thematic.renderTemplateSync({ ...options... });
 ```
 
+## Parser API
+
+The primary API above is designed to accomodate common use-cases. However, custom build tools may want to take advantage of the underlying parser API, documented on the wiki.
+
 ## Full API Options
 
 #### Required for all methods, one or both:
@@ -226,7 +230,7 @@ function sassTheme(opts) {
       opts.file = file.path;
       opts.data = file.contents.toString('utf-8');
 
-      thematic.parseThemeSass(opts, function(err, result) {
+      thematic.parseSass(opts, function(err, result) {
         output += result;
         done();
       });
