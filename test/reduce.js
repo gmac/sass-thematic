@@ -222,7 +222,7 @@ describe('@keyframes reducer', function() {
   })
 
   it ('drops @keyframe blocks without override variables.', function() {
-    assert.equal(linefeed(4, 1), '// atrule')
+    assert.equal(linefeed(4, 1), '// atruler')
   })
 
   it ('drops @keyframe rulesets without override variables.', function() {

@@ -2,7 +2,7 @@ var assert = require('assert');
 var AST = require('../lib/ast');
 var Thematic = require('../index');
 
-describe('basics', function() {
+describe('thematic', function() {
   describe('parsing operations', function() {
     var opts = {
       varsFile: 'style/reduce/_vars.scss',

@@ -40,7 +40,6 @@ The v2.x API has changed significantly to better support selecting a workflow. B
 
  - Smaller API, tailored via options. Tree pruning no longer happens by default.
  - Webpack integration removed. Webpack plugins should independently wrap this module.
- - Upgrades to Gonzales-PE latest, and adjusts implementation to match new parsing operations.
 
 ## API
 
