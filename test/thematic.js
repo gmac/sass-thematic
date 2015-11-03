@@ -1,13 +1,14 @@
 var assert = require('assert');
 var AST = require('../lib/ast');
-var Thematic = require('../lib/thematic');
-var thematicApi = require('../index');
+var Thematic = require('../index');
 
 describe('basics', function() {
   describe('parsing operations', function() {
     var opts = {
       varsFile: 'style/reduce/_vars.scss',
       file: 'style/reduce/parse.scss',
+      treeRemoval: true,
+      varsRemoval: true,
       cwd: __dirname
     };
 
@@ -44,13 +45,13 @@ describe('basics', function() {
 
     it ('may disable tree pruning.', function() {
       var theme = new Thematic(JSON.parse(ast.toJson()), opts);
-      var result = theme.parse({disableTreeRemoval: true}).toString();
+      var result = theme.parse({treeRemoval: false}).toString();
       assert.equal(normalize(result), '$junk-color: red; $junk-size: 100; // varsfile .junk { color: $junk-color; font-family: serif; } .keep { color: $keep-color; font-family: serif; }');
     })
 
     it ('may disable variables omission and tree pruning (effectively resulting in a no-op).', function() {
       var theme = new Thematic(JSON.parse(ast.toJson()), opts);
-      assert.equal(theme.parse({disableVarsRemoval: true, disableTreeRemoval: true}).toString(), ast.toString());
+      assert.equal(theme.parse({treeRemoval: false, varsRemoval: false}).toString(), ast.toString());
     })
 
     it ('templatizes theme variables.', function() {
@@ -61,58 +62,8 @@ describe('basics', function() {
 
     it ('templatizes theme variables throughout an expanded source tree.', function() {
       var theme = new Thematic(JSON.parse(ast.toJson()), opts);
-      var result = theme.parse({disableTreeRemoval: true, template: true}).toString();
+      var result = theme.parse({treeRemoval: false, template: true}).toString();
       assert.equal(normalize(result), '$junk-color: red; $junk-size: 100; // varsfile .junk { color: $junk-color; font-family: serif; } .keep { color: ____keep-color____; font-family: serif; }');
-    })
-  })
-
-  describe('pruning operations', function() {
-    var linefeed;
-
-    before(function(done) {
-      thematicApi.parseThemeSass({
-        varsFile: 'style/reduce/_vars.scss',
-        file: 'style/reduce/basic.scss',
-        cwd: __dirname,
-      }, function(err, src) {
-        var lines = src.split('\n');
-        linefeed = function(s, len) {
-          return lines.slice(s, s+len).map(function(s) { return s.trim() }).join(' ');
-        };
-        done();
-      })
-    })
-
-    it ('fulfills an @import with the requested file contents.', function() {
-      assert.equal(linefeed(0, 2), '$junk-color: red; $junk-size: 100;');
-    })
-
-    it ('drops @import requests for the override variables file.', function() {
-      assert.equal(linefeed(2, 1), '// varsfile');
-    })
-
-    it ('drops rulesets without override variables.', function() {
-      assert.equal(linefeed(4, 1), '// ruleset');
-    })
-
-    it ('keeps rulesets with override variables, but drops other declarations.', function() {
-      assert.equal(linefeed(6, 4), '.keep { color: $keep-color; // declaration; }');
-    })
-
-    it ('keeps nested ruleset heirarchies, while dropping their unnecessary declarations.', function() {
-      assert.equal(linefeed(11, 3), '.nested { // declaration; // declaration;');
-    })
-
-    it ('drops nested rulesets without override variables.', function() {
-      assert.equal(linefeed(15, 1), '// ruleset');
-    })
-
-    it ('keeps nested rulesets with override variables, but drops other declarations.', function() {
-      assert.equal(linefeed(17, 4), '.keep { color: $keep-color; // declaration; }');
-    })
-
-    it ('keeps rulesets flagged with an "@sass-thematic-keep" singleline comment.', function() {
-      assert.equal(linefeed(23, 3), '.keep { // @sass-thematic-keep }');
     })
   })
 
@@ -138,20 +89,20 @@ describe('basics', function() {
     })
   })
 
-  describe('template pruning errors', function() {
+  describe('template field usage errors', function() {
     var opts = {
       varsFile: 'style/reduce/_vars.scss',
       file: 'style/reduce/error.scss',
       cwd: __dirname,
       template: true,
-    };
+    }
 
     function assertError(src, error) {
       opts.data = src;
       
       assert.throws(function() {
         new Thematic(AST.parseSync(opts).ast, opts).parse(opts);
-      }, error);
+      }, error)
     }
 
     it ('errors when template theme variables are used as function arguments.', function() {
@@ -178,14 +129,14 @@ describe('basics', function() {
     })
   })
 
-  describe('full template parsing', function() {
+  describe('Sass template parsing', function() {
     var target;
     var opts = {
-      disableVarsRemoval: true,
       varsFile: 'style/reduce/_vars.scss',
       file: 'style/reduce/basic.scss',
+      template: true,
       cwd: __dirname
-    };
+    }
 
     before(function() {
       target = AST.parseSync(opts).ast.toString();
@@ -193,15 +144,24 @@ describe('basics', function() {
     })
 
     it ('synchronously renders full-source templates.', function() {
-      var result = thematicApi.parseTemplateSassSync(opts);
+      var result = Thematic.parseSassSync(opts);
       assert.equal(result, target);
     })
 
     it ('asynchronously renders full-source templates.', function(done) {
-      thematicApi.parseTemplateSass(opts, function(err, result) {
+      Thematic.parseSass(opts, function(err, result) {
         assert.equal(result, target);
         done();
       })
+    })
+
+    it ('allows customization of interpolation fields wrappers.', function() {
+      var customOpts = AST.extend(opts, {
+        fieldOpen: '@@',
+        fieldClose: '@@'
+      })
+      var result = Thematic.parseSassSync(opts);
+      assert.equal(result, target.replace(/____/g, '@@'));
     })
   })
 })

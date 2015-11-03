@@ -2,7 +2,7 @@ var path = require('path');
 var assert = require('assert');
 var AST = require('../lib/ast');
 
-describe.only ('@import statements', function() {
+describe('@import statements', function() {
   var resultSync, resultAsync;
   var sync, async;
 
@@ -13,7 +13,6 @@ describe.only ('@import statements', function() {
     };
 
     AST.parse(opts, function(err, result) {
-      console.log(result.ast.toString());
       resultAsync = result;
       resultSync = AST.parseSync(opts);
       sync = resultSync.ast.toString();

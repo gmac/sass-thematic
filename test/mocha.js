@@ -34,13 +34,8 @@ mocha.addFile('test/ast-resolutions');
 mocha.addFile('test/ast-paths');
 mocha.addFile('test/ast-data');
 mocha.addFile('test/ast-taxonomy');
-mocha.addFile('test/reduce-basic');
-mocha.addFile('test/reduce-interpolation');
-mocha.addFile('test/reduce-mixin');
-mocha.addFile('test/reduce-extend');
-mocha.addFile('test/reduce-placeholder');
-mocha.addFile('test/reduce-directive');
-mocha.addFile('test/reduce-keyframes');
+mocha.addFile('test/thematic');
+mocha.addFile('test/reduce');
 mocha.addFile('test/render');
 
 mocha.run(function(failures) {

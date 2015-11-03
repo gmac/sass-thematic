@@ -1,22 +1,24 @@
 var assert = require('assert');
-var sassThematic = require('../index');
-var Thematic = require('../lib/thematic');
+var Thematic = require('../index');
 
 describe('sass rendering', function() {
-
   it ('compiles CSS markup with provided theme variables.', function(done) {
     var opts = {
       themeData: '$keep-color: aqua; $keep-size: 50;',
       varsFile: 'style/render/_vars.scss',
       file: 'style/render/render.scss',
-      outputStyle: 'compressed',
-      cwd: __dirname,
+      treeRemoval: true,
+      varsRemoval: true,
+      sassOptions: {
+        outputStyle: 'compressed',
+      },
+      cwd: __dirname
     };
 
     var RESULT = '.keep{color:aqua}.include-keep{color:aqua}';
-    var sync = sassThematic.renderThemeCSSSync(opts);
+    var sync = Thematic.renderCSSSync(opts);
 
-    sassThematic.renderThemeCSS(opts, function(err, async) {
+    Thematic.renderCSS(opts, function(err, async) {
       assert.equal(sync.trim(), RESULT);
       assert.equal(async.trim(), RESULT);
       done();
@@ -28,16 +30,20 @@ describe('sass rendering', function() {
       templateOpen: '<< ',
       templateClose: ' >>',
       templateSnakeCase: true,
-      outputStyle: 'compressed',
+      treeRemoval: true,
+      varsRemoval: true,
+      sassOptions: {
+        outputStyle: 'compressed',
+      },
       varsFile: 'style/render/_vars.scss',
       file: 'style/render/render.scss',
-      cwd: __dirname,
+      cwd: __dirname
     };
 
     var RESULT = '.keep{color:<< keep_color >>}.include-keep{color:<< keep_color >>}';
-    var sync = sassThematic.renderThemeTemplateSync(opts);
+    var sync = Thematic.renderTemplateSync(opts);
 
-    sassThematic.renderThemeTemplate(opts, function(err, async) {
+    Thematic.renderTemplate(opts, function(err, async) {
       assert.equal(sync.trim(), RESULT);
       assert.equal(async.trim(), RESULT);
       done();
@@ -49,16 +55,20 @@ describe('sass rendering', function() {
       templateOpen: '<< ',
       templateClose: ' >>',
       templateSnakeCase: true,
-      outputStyle: 'compressed',
+      treeRemoval: true,
+      varsRemoval: true,
+      sassOptions: {
+        outputStyle: 'compressed',
+      },
       varsFile: 'style/render/_vars.scss',
       file: 'style/render/helpers.scss',
-      cwd: __dirname,
+      cwd: __dirname
     };
 
     var RESULT = '.keep{color:<< keep_color >>}';
-    var sync = sassThematic.renderThemeTemplateSync(opts);
+    var sync = Thematic.renderTemplateSync(opts);
 
-    sassThematic.renderThemeTemplate(opts, function(err, async) {
+    Thematic.renderTemplate(opts, function(err, async) {
       assert.equal(sync.trim(), RESULT);
       assert.equal(async.trim(), RESULT);
       done();
@@ -73,17 +83,17 @@ describe('sass rendering', function() {
     });
 
     it ('converts plain Sass variables into template fields via regex.', function() {
-      var result = thematic.varsToFieldLiterals('.style { height: $alpha; width: $omega; }');
+      var result = thematic.varsToFieldIdentifiers('.style { height: $alpha; width: $omega; }');
       assert.equal(result, '.style { height: ____alpha____; width: ____omega____; }')
     })
 
     it ('populates template fields with theme variables.', function() {
-      var result = thematic.fieldLiteralsToValues('.style { height: ____alpha____; width: ____omega____; }');
+      var result = thematic.fieldIdentifiersToValues('.style { height: ____alpha____; width: ____omega____; }');
       assert.equal(result, '.style { height: 0; width: 100px; }')
     })
 
     it ('converts template fields into interpolations.', function() {
-      var result = thematic.fieldLiteralsToInterpolations('.style { height: ____alpha____; width: ____omega____; }');
+      var result = thematic.fieldIdentifiersToInterpolations('.style { height: ____alpha____; width: ____omega____; }');
       assert.equal(result, '.style { height: <%= alpha %>; width: <%= omega %>; }')
     })
   })

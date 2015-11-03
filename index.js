@@ -13,73 +13,45 @@ Thematic.parseASTSync = function(opts) {
   return AST.parseSync(opts).ast;
 };
 
-// parseThemeAST
-
-Thematic.parseThemeAST = function(opts, done) {
-  AST.parse(opts, function(err, result) {
-    var theme = new Thematic(result.ast, opts).parse(opts);
-    done(err, theme.ast);
-  });
-};
-
-Thematic.parseThemeASTSync = function(opts) {
-  var result = AST.parseSync(opts);
-  var theme = new Thematic(result.ast, opts).parse(opts);
-  return theme.ast;
-};
-
-// parseThemeSass
-
-Thematic.parseThemeSass = function(opts, done) {
-  this.parseThemeAST(opts, function(err, ast) {
-    done(err, ast.toString());
-  });
-};
-
-Thematic.parseThemeSassSync = function(opts) {
-  return this.parseThemeASTSync(opts).toString();
-};
-
 // parseTemplateSass
 
-Thematic.parseTemplateSass = function(opts, done) {
-  opts.template = true;
-  opts.disableTreeRemoval = true;
-  this.parseThemeAST(opts, function(err, ast) {
-    done(err, ast.toString());
+Thematic.parseSass = function(opts, done) {
+  this.parseAST(opts, function(err, ast) {
+    var thematic = new Thematic(ast, opts).parse(opts);
+    done(err, thematic.ast.toString());
   });
 };
 
-Thematic.parseTemplateSassSync = function(opts) {
-  opts.template = true;
-  opts.disableTreeRemoval = true;
-  return this.parseThemeASTSync(opts).toString();
+Thematic.parseSassSync = function(opts) {
+  var ast = this.parseASTSync(opts);
+  var thematic = new Thematic(ast, opts).parse(opts);
+  return thematic.ast.toString();
 };
 
 // renderThemeCSS
 
-Thematic.renderThemeCSS = function(opts, done) {
+Thematic.renderCSS = function(opts, done) {
   AST.parse(opts, function(err, result) {
-    new Thematic(result.ast, opts).css(opts, done);
+    new Thematic(result.ast, opts).toCSS(opts, done);
   });
 };
 
-Thematic.renderThemeCSSSync = function(opts) {
+Thematic.renderCSSSync = function(opts) {
   var result = AST.parseSync(opts);
-  return new Thematic(result.ast, opts).cssSync(opts);
+  return new Thematic(result.ast, opts).toCSSSync(opts);
 };
 
 // renderThemeTemplate
 
-Thematic.renderThemeTemplate = function(opts, done) {
+Thematic.renderTemplate = function(opts, done) {
   AST.parse(opts, function(err, result) {
-    new Thematic(result.ast, opts).template(opts, done);
+    new Thematic(result.ast, opts).toTemplate(opts, done);
   });
 };
 
-Thematic.renderThemeTemplateSync = function(opts) {
+Thematic.renderTemplateSync = function(opts) {
   var result = AST.parseSync(opts);
-  return new Thematic(result.ast, opts).templateSync(opts);
+  return new Thematic(result.ast, opts).toTemplateSync(opts);
 };
 
 module.exports = Thematic;
