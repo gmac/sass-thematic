@@ -97,4 +97,34 @@ describe('sass rendering', function() {
       assert.equal(result, '.style { height: <%= alpha %>; width: <%= omega %>; }')
     })
   })
+
+  describe('usage counts', function() {
+    var thematic;
+
+    beforeEach(function() {
+      thematic = new Thematic({}, {
+        varsData: "$alpha: 0; $omega: 100px;",
+        template: true
+      })
+    })
+
+    it.only ('keeps a running tally of field usage while parsing a source.', function() {
+      thematic.loadSource('.style { height: $alpha; width: ____omega____; margin: $omega; }').parse();
+      console.log(thematic.usage)
+      assert.equal(thematic.usage.alpha, 1)
+      assert.equal(thematic.usage.omega, 2)
+    })
+
+    it ('keeps a running tally of field usage while parsing vars into fields.', function() {
+      thematic.varsToFieldIdentifiers('.style { height: $alpha; width: $omega; margin: $omega; }')
+      assert.equal(thematic.usage.alpha, 1)
+      assert.equal(thematic.usage.omega, 2)
+    })
+
+    it ('generates a running tally of pre-formatted field usage.', function() {
+      thematic.reportFieldIdentifiers('.style { height: ____alpha____; width: ____omega____; margin: ____omega____; }')
+      assert.equal(thematic.usage.alpha, 1)
+      assert.equal(thematic.usage.omega, 2)
+    })
+  })
 })
