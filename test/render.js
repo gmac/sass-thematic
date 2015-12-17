@@ -108,9 +108,8 @@ describe('sass rendering', function() {
       })
     })
 
-    it.only ('keeps a running tally of field usage while parsing a source.', function() {
+    it ('keeps a running tally of field usage while parsing a source.', function() {
       thematic.loadSource('.style { height: $alpha; width: ____omega____; margin: $omega; }').parse();
-      console.log(thematic.usage)
       assert.equal(thematic.usage.alpha, 1)
       assert.equal(thematic.usage.omega, 2)
     })
