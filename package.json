@@ -1,6 +1,6 @@
 {
   "name": "sass-thematic",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "A parser for generating dynamic theme stylesheets from Sass.",
   "keywords": [
     "sass",
@@ -25,6 +25,6 @@
     "gonzales-pe": "3.0.0-31"
   },
   "peerDependencies": {
-    "node-sass": "^3.3.0"
+    "node-sass": "^3.4.2"
   }
 }

@@ -121,7 +121,7 @@ describe('sass rendering', function() {
     })
 
     it ('generates a running tally of pre-formatted field usage.', function() {
-      thematic.reportFieldIdentifiers('.style { height: ____alpha____; width: ____omega____; margin: ____omega____; }')
+      thematic.scanFieldUsage('.style { height: ____alpha____; width: ____omega____; margin: ____omega____; }')
       assert.equal(thematic.usage.alpha, 1)
       assert.equal(thematic.usage.omega, 2)
     })
